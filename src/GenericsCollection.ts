@@ -33,7 +33,7 @@ export class Generic extends Tile {
 
 
     onTileClick() {
-        this.visual.selectionManagerUnbound.select(this.i, this.visual.visualSettings.content.multiselect) //FIXED
+        this.visual.selectionManager.select((<GenericData>this.tileData).selectionId, this.visual.visualSettings.content.multiselect) 
         this.visual.update(this.collection.options)
     }
 

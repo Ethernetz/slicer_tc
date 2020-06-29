@@ -1,5 +1,5 @@
 {
-  "name": "visual",
+  "name": "slicer_tc",
   "scripts": {
     "pbiviz": "pbiviz",
     "start": "pbiviz start",
