@@ -145,18 +145,7 @@ export class Visual implements IVisual {
                 if (effectSettingsKeys[i].startsWith("glow") && effectSettingsKeys[i] != "glow")
                     delete settings.effects[effectSettingsKeys[i]]
 
-
-        for (let i = 1; i < 11; i++) {
-            delete settings.content['text' + i]
-            delete settings.content['icon' + i]
-            delete settings.bgimg['img' + i]
-        }
-
-
-        if (!this.visualSettings.bgimg.bgimgs)
-            for (let i = 1; i < 11; i++)
-                delete settings.bgimg['img' + i]
-
+        
 
         let iconPlacement = settings.icon[getCorrectPropertyStateName(settings.icon.state, 'placement')] as IconPlacement
         if (iconPlacement == IconPlacement.left) {
