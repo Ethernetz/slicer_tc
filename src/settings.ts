@@ -86,6 +86,10 @@ export class MeasuresSettings{
   public transparencyH: number = 0;
 }
 
+export class BgImgSettings{
+  public bgimgs: boolean = false
+}
+
 export class VisualSettings extends DataViewObjectsParser {
   public tile: TileSettings = new TileSettings();
   public text: TextSettings = new TextSettings();
@@ -93,5 +97,6 @@ export class VisualSettings extends DataViewObjectsParser {
   public layout: LayoutSettings = new LayoutSettings();
   public effects: EffectSettings = new EffectSettings();
   public content: ContentSettings = new ContentSettings();
+  public bgimg: BgImgSettings = new BgImgSettings();
   public measures: MeasuresSettings = new MeasuresSettings();
 }

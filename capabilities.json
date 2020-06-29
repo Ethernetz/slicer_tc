@@ -9,6 +9,11 @@
             "displayName": "Icons",
             "name": "icons",
             "kind": "Grouping"
+        },
+        {
+            "displayName": "Background images",
+            "name": "bgimgs",
+            "kind": "Grouping"
         }
     ],
     "objects": {
@@ -634,56 +639,56 @@
                     "description": "Top margin for the icon",
                     "type": {
                         "numeric": true
-                    }  
+                    }
                 },
                 "topMarginS": {
                     "displayName": "Top margin",
                     "description": "Top margin for the icon",
                     "type": {
                         "numeric": true
-                    }  
+                    }
                 },
                 "topMarginU": {
                     "displayName": "Top margin",
                     "description": "Top margin for the icon",
                     "type": {
                         "numeric": true
-                    }  
+                    }
                 },
                 "topMarginH": {
                     "displayName": "Top margin",
                     "description": "Top margin for the icon",
                     "type": {
                         "numeric": true
-                    }  
+                    }
                 },
                 "bottomMarginA": {
                     "displayName": "Bottom margin",
                     "description": "Bottom margin for the icon",
                     "type": {
                         "numeric": true
-                    }  
+                    }
                 },
                 "bottomMarginS": {
                     "displayName": "Bottom margin",
                     "description": "Bottom margin for the icon",
                     "type": {
                         "numeric": true
-                    }  
+                    }
                 },
                 "bottomMarginU": {
                     "displayName": "Bottom margin",
                     "description": "Bottom margin for the icon",
                     "type": {
                         "numeric": true
-                    }  
+                    }
                 },
                 "bottomMarginH": {
                     "displayName": "Bottom margin",
                     "description": "Bottom margin for the icon",
                     "type": {
                         "numeric": true
-                    }  
+                    }
                 },
                 "transparencyA": {
                     "displayName": "Transparency",
@@ -1350,7 +1355,7 @@
                 }
             }
         },
-        "measures":{
+        "measures": {
             "displayName": "Measures",
             "properties": {
                 "state": {
@@ -1581,6 +1586,18 @@
                     }
                 }
             }
+        },
+        "bgimg": {
+            "displayName": "Background image",
+            "properties": {
+                "bgimgs": {
+                    "displayName": "Background images",
+                    "description": "Option to give URL for tile icons",
+                    "type": {
+                        "bool": true
+                    }
+                }
+            }
         }
     },
     "dataViewMappings": [
@@ -1596,6 +1613,11 @@
                         {
                             "for": {
                                 "in": "icons"
+                            }
+                        },
+                        {
+                            "for": {
+                                "in": "bgimgs"
                             }
                         }
                     ]
