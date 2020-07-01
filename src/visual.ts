@@ -66,34 +66,25 @@ import { GenericsCollection } from './GenericsCollection'
 import { ContentFormatType } from "./TilesCollection/enums";
 
 export class Visual implements IVisual {
-    private target: HTMLElement;
-    public selectionManager: ISelectionManager;
-    public selectionManagerUnbound: SelectionManagerUnbound
-    private selectionManagerHover: ISelectionManager;
-    private selectionIds: any = {};
     public host: IVisualHost;
-
     public visualSettings: VisualSettings;
+
     private selectionIdBuilder: ISelectionIdBuilder;
+    public selectionManager: ISelectionManager;
 
     private svg: Selection<SVGElement>;
     private container: Selection<SVGElement>;
     public hoveredIndex: number
-
     public shiftFired: boolean = false
-
-
+    
     constructor(options: VisualConstructorOptions) {
         this.selectionIdBuilder = options.host.createSelectionIdBuilder();
         this.selectionManager = options.host.createSelectionManager();
-        this.selectionManagerUnbound = new SelectionManagerUnbound()
-        this.selectionManagerHover = options.host.createSelectionManager();
         this.host = options.host;
         this.svg = d3.select(options.element)
             .append('svg')
             .classed('navigator', true);
 
-        // let defs = this.svg.append("defs");
         this.container = this.svg.append("g")
             .classed('container', true);
     }
