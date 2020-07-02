@@ -51,18 +51,13 @@ import * as d3 from "d3";
 
 import { propertyStateName } from './interfaces'
 import { getPropertyStateNameArr, getObjectsToPersist, getCorrectPropertyStateName } from './functions'
-import { SelectionManagerUnbound } from './SelectionManagerUnbound'
 
 type Selection<T extends d3.BaseType> = d3.Selection<T, any, any, any>;
 
 // import * as enums from "./enums"
 import { TileSizingType, TileLayoutType, TileShape, IconPlacement, State } from './TilesCollection/enums'
-import { ContentSource } from './enums'
 
-import { select, merge } from "d3";
-
-
-import { GenericsCollection } from './GenericsCollection'
+import { SlicerCollection } from './SlicerCollection'
 import { ContentFormatType } from "./TilesCollection/enums";
 
 export class Visual implements IVisual {
@@ -193,22 +188,22 @@ export class Visual implements IVisual {
             .style('height', options.viewport.height)
 
 
-        let genericsCollection = new GenericsCollection()
+        let slicersCollection = new SlicerCollection()
 
-        genericsCollection.formatSettings.tile = this.visualSettings.tile
-        genericsCollection.formatSettings.text = this.visualSettings.text
-        genericsCollection.formatSettings.icon = this.visualSettings.icon
-        genericsCollection.formatSettings.layout = this.visualSettings.layout
-        genericsCollection.formatSettings.effect = this.visualSettings.effects
+        slicersCollection.formatSettings.tile = this.visualSettings.tile
+        slicersCollection.formatSettings.text = this.visualSettings.text
+        slicersCollection.formatSettings.icon = this.visualSettings.icon
+        slicersCollection.formatSettings.layout = this.visualSettings.layout
+        slicersCollection.formatSettings.effect = this.visualSettings.effects
 
 
-        genericsCollection.container = this.container
-        genericsCollection.viewport = {
+        slicersCollection.container = this.container
+        slicersCollection.viewport = {
             height: options.viewport.height,
             width: options.viewport.width,
         }
-        genericsCollection.visual = this
-        genericsCollection.options = options
+        slicersCollection.visual = this
+        slicersCollection.options = options
 
 
         let dataView = options.dataViews[0]
@@ -222,7 +217,7 @@ export class Visual implements IVisual {
             let tileSelectionId = this.host.createSelectionIdBuilder()
                 .withCategory(categories[0], i)
                 .createSelectionId();
-            genericsCollection.tilesData.push({
+            slicersCollection.tilesData.push({
                 text: pageValue,
                 iconURL: this.visualSettings.icon.icons ? iconURL : "",
                 bgimgURL: this.visualSettings.bgimg.bgimgs ? bgImgURL : "",
@@ -237,7 +232,7 @@ export class Visual implements IVisual {
             });
         }
 
-        genericsCollection.render()
+        slicersCollection.render()
     }
 
 

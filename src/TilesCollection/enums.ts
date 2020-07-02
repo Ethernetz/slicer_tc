@@ -8,7 +8,7 @@ export enum State {
 export enum ContentFormatType {
     text = "text",
     text_icon = "text_icon",
-    text_textSecondary = "text_textSecondary"
+    text_text2 = "text_text2"
 }
 
 export enum AlignmentType {
@@ -51,11 +51,13 @@ export enum Direction {
     top = "top",
     top_right = "top_right",
     right = "right",
-    custom = "custom"
+    custom = "custom",
+    empty = ""
 }
 
-export enum IconPlacement {
+export enum IconPlacement{
     left = "left",
     above = "above",
-    below = "below"
+    below = "below",
+    empty = ""
 }

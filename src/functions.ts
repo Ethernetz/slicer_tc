@@ -3,24 +3,6 @@ import {State} from './TilesCollection/enums'
 import powerbi from "powerbi-visuals-api";
 import { VisualSettings } from './settings';
 
-export function calculateWordDimensions(text: string, fontFamily: string, fontSize: string, widthType?: string, maxWidth?: string): { width: number, height: number } {
-    var div = document.createElement('div');
-    div.style.fontFamily = fontFamily
-    div.style.fontSize = fontSize
-    div.style.width = widthType
-    div.style.maxWidth = maxWidth || 'none'
-    div.style.whiteSpace = maxWidth ? "normal" : "nowrap"
-    div.style.position = "absolute";
-    div.innerHTML = text
-    document.body.appendChild(div);
-    var dimensions = {
-        width: div.offsetWidth+1,
-        height: div.offsetHeight
-    }
-    div.parentNode.removeChild(div);
-    
-    return dimensions;
-}
 
 export function getPropertyStateNameArr(propKeys: string[]): propertyStateName[] {
     let propertyStateNameArr: propertyStateName[] = []
@@ -35,7 +17,8 @@ export function getPropertyStateNames(propBase: string): propertyStateName{
             all: propBase+"A",
             selected: propBase+"S",
             unselected: propBase+"U",
-            hover: propBase+"H"
+            hover: propBase+"H",
+            default: propBase+ "D"
         }
 }
 
@@ -70,8 +53,8 @@ export function getObjectsToPersist(visualSettings: VisualSettings): powerbi.Vis
 
         for (let j = 0; j < groupedKeyNamesArr.length; j++) {
             let groupedKeyNames: propertyStateName = groupedKeyNamesArr[j]
-            let type = typeof visualSettings[objKey][groupedKeyNames.all]
             let propertyState: propertyStatesInput = {
+                default: visualSettings[objKey][groupedKeyNames.default],
                 all: visualSettings[objKey][groupedKeyNames.all],
                 selected: visualSettings[objKey][groupedKeyNames.selected],
                 unselected: visualSettings[objKey][groupedKeyNames.unselected],
@@ -97,23 +80,34 @@ export function levelProperties(propertyStates: propertyStatesInput): propertySt
     let _selected = propertyStates.selected
     let _unselected = propertyStates.unselected
     let _hover = propertyStates.hover
-    let _allExists: boolean = typeof _all == 'number' ? _all >= 0 : _all && _all.length > 0
-    let _selectedExists: boolean = typeof _selected == 'number' ? _selected >= 0 : _selected && _selected.length > 0
-    let _nullValue = typeof _all == 'number' ? null : ""
-    if (propertyStates.state == State.all && _allExists)
+    let allExists = false
+    let nullValue = null
+    if(typeof _all == 'number'){
+        allExists = _all >= 0
+    } else {
+        allExists = _all != null && _all.length > 0
+        nullValue = ""
+    }
+
+    if(_selected == null || _unselected == null || _hover == null){
+        _selected = _unselected = _hover = propertyStates.default
+    }
+
+    if (propertyStates.state == State.all && allExists)
         _selected = _unselected = _hover = _all
-    if (_selectedExists && _selected == _unselected)
+    if (_selected == _unselected && _selected == _hover)
         _all = _selected
-    if (!(_selected == _unselected && _selected == _hover))
-        _all = _nullValue
+    if (_selected != _unselected || _selected != _hover)
+        _all = nullValue
     return {
         all: _all,
         selected: _selected,
         unselected: _unselected,
         hover: _hover,
-        didChange: !(propertyStates.all == _all && 
-                    (propertyStates.selected == null || propertyStates.selected == _selected)  && 
-                    (propertyStates.unselected == null || propertyStates.unselected == _unselected) &&
-                    (propertyStates.hover == null || propertyStates.hover == _hover))
+        default: propertyStates.default,
+        didChange: !((propertyStates.all == _all) && 
+                    propertyStates.selected == _selected  && 
+                    propertyStates.unselected == _unselected &&
+                    propertyStates.hover == _hover)
     }
 }
