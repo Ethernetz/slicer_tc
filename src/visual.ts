@@ -47,15 +47,11 @@ import EnumerateVisualObjectInstancesOptions = powerbi.EnumerateVisualObjectInst
 import { valueFormatter } from "powerbi-visuals-utils-formattingutils"
 
 import * as d3 from "d3";
-// import { ProcessedVisualSettings } from "./processedvisualsettings";
-
 import { PropertyGroupKeys } from './TilesCollection/interfaces'
-import { getPropertyStateNameArr, getObjectsToPersist } from './TilesCollectionUtlities/functions'
-import { getCorrectPropertyStateName } from './functions'
+import { getPropertyStateNameArr, getObjectsToPersist, getCorrectPropertyStateName } from './TilesCollectionUtlities/functions'
 
 type Selection<T extends d3.BaseType> = d3.Selection<T, any, any, any>;
 
-// import * as enums from "./enums"
 import { TileSizingType, TileLayoutType, TileShape, IconPlacement, State } from './TilesCollection/enums'
 
 import { SlicerCollection } from './SlicerCollection'
