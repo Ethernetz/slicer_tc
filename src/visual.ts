@@ -58,6 +58,7 @@ import { TileSizingType, TileLayoutType, TileShape, IconPlacement, State } from 
 
 import { SlicerCollection } from './SlicerCollection'
 import { ContentFormatType } from "./TilesCollection/enums";
+import { DisabledMode } from "./enums";
 
 export class Visual implements IVisual {
     public host: IVisualHost;
@@ -70,7 +71,7 @@ export class Visual implements IVisual {
     private container: Selection<SVGElement>;
     public hoveredIndex: number
     public shiftFired: boolean = false
-    
+
     constructor(options: VisualConstructorOptions) {
         this.selectionIdBuilder = options.host.createSelectionIdBuilder();
         this.selectionManager = options.host.createSelectionManager();
@@ -98,21 +99,31 @@ export class Visual implements IVisual {
                         delete settings[settingKey][groupedKeyNames.selected]
                         delete settings[settingKey][groupedKeyNames.unselected]
                         delete settings[settingKey][groupedKeyNames.hover]
+                        delete settings[settingKey][groupedKeyNames.disabled]
                         break
                     case State.selected:
                         delete settings[settingKey][groupedKeyNames.all]
                         delete settings[settingKey][groupedKeyNames.unselected]
                         delete settings[settingKey][groupedKeyNames.hover]
+                        delete settings[settingKey][groupedKeyNames.disabled]
                         break
                     case State.unselected:
                         delete settings[settingKey][groupedKeyNames.all]
                         delete settings[settingKey][groupedKeyNames.selected]
                         delete settings[settingKey][groupedKeyNames.hover]
+                        delete settings[settingKey][groupedKeyNames.disabled]
                         break
                     case State.hovered:
                         delete settings[settingKey][groupedKeyNames.all]
                         delete settings[settingKey][groupedKeyNames.selected]
                         delete settings[settingKey][groupedKeyNames.unselected]
+                        delete settings[settingKey][groupedKeyNames.disabled]
+                        break
+                    case State.disabled:
+                        delete settings[settingKey][groupedKeyNames.all]
+                        delete settings[settingKey][groupedKeyNames.selected]
+                        delete settings[settingKey][groupedKeyNames.unselected]
+                        delete settings[settingKey][groupedKeyNames.hover]
                         break
                 }
             }
@@ -132,7 +143,7 @@ export class Visual implements IVisual {
                 if (effectSettingsKeys[i].startsWith("glow") && effectSettingsKeys[i] != "glow")
                     delete settings.effects[effectSettingsKeys[i]]
 
-        
+
 
         let iconPlacement = settings.icon[getCorrectPropertyStateName(settings.icon.state, 'placement')] as IconPlacement
         if (iconPlacement == IconPlacement.left) {
@@ -174,12 +185,12 @@ export class Visual implements IVisual {
     }
 
     public update(options: VisualUpdateOptions) {
-        if (!(options 
-            && options.dataViews 
+        if (!(options
+            && options.dataViews
             && options.dataViews[0]
             && options.dataViews[0].categorical
             && options.dataViews[0].categorical.categories
-            ))
+        ))
             return
         this.visualSettings = VisualSettings.parse(options.dataViews[0]) as VisualSettings
 
@@ -207,39 +218,67 @@ export class Visual implements IVisual {
 
 
         let dataView = options.dataViews[0]
-        
-        let categories: powerbi.DataViewCategoryColumn[] = dataView.categorical.categories;
+
+        let allCategories: powerbi.DataViewCategoryColumn[] = dataView.categorical.categories;
+        let categories = allCategories[0]
         let values: powerbi.DataViewValueColumn = dataView.categorical.values && dataView.categorical.values[0]
         let highlights: powerbi.PrimitiveValue[] = values && values.highlights
         let selectionIdKeys: string[] = (this.selectionManager.getSelectionIds() as powerbi.visuals.ISelectionId[]).map(x => x.getKey()) as string[]
 
-        for (let i = 0; i < categories[0].values.length; i++) {
-            
-            let categoryInstance: string = categories[0].values[i].toString();
-            let instanceValue = values && values.values && values.values[i] as number
-            let instanceHighlight = highlights && (highlights[i] || 0)as number
+        let indexesToRender: number[] = []
 
-            let iconURL: string = categories[1] ? categories[1].values[i].toString() : "";
-            let bgImgURL: string = categories[2] ? categories[2].values[i].toString() : "";
+        if (highlights) {
+            switch (this.visualSettings.content.disabledMode) {
+                case DisabledMode.hide:
+                    for (let i = 0; i < highlights.length; i++) {
+                        if (highlights[i])
+                            indexesToRender.push(i)
+                    }
+                break
+                case DisabledMode.bottom:
+                    let highlighted = []
+                    let nonhighlighted = []
+                    for (let i = 0; i < highlights.length; i++) {
+                        if (highlights[i])
+                            highlighted.push(i)
+                        else
+                            nonhighlighted.push(i)
+                    }
+                    indexesToRender = highlighted.concat(nonhighlighted)
+                    break
+                case DisabledMode.inplace:
+                    indexesToRender = [...Array(highlights.length).keys()]
+            }
+        } else {
+            indexesToRender = [...Array(values.values.length).keys()]
+        }
+
+
+        indexesToRender.forEach(i=>{
+            let categoryInstance: string = categories.values[i].toString();
+            let instanceValue = values && values.values && values.values[i] as number
+            let instanceHighlight = highlights && (highlights[i] || 0) as number
+
+            let iconURL: string = allCategories[1] ? allCategories[1].values[i].toString() : "";
+            let bgImgURL: string = allCategories[2] ? allCategories[2].values[i].toString() : "";
             let tileSelectionId = this.host.createSelectionIdBuilder()
-                .withCategory(categories[0], i)
+                .withCategory(categories, i)
                 .createSelectionId();
             slicersCollection.tilesData.push({
-                text: categoryInstance + (values ? ", " +( highlights ? instanceHighlight : instanceValue) : ""),
+                text: categoryInstance + (values ? ", " + (highlights ? instanceHighlight : instanceValue) : ""),
                 iconURL: this.visualSettings.icon.icons ? iconURL : "",
                 bgimgURL: this.visualSettings.bgimg.bgimgs ? bgImgURL : "",
                 contentFormatType: this.visualSettings.icon.icons ? ContentFormatType.text_icon : ContentFormatType.text,
                 selectionId: tileSelectionId,
                 isHovered: this.hoveredIndex == i,
-                isDisabled: ( highlights ? instanceHighlight : instanceValue) == 0,
+                isDisabled: (highlights ? instanceHighlight : instanceValue) == 0,
                 get isSelected(): boolean {
                     return this.selectionId &&
                         selectionIdKeys &&
                         selectionIdKeys.indexOf(this.selectionId.getKey() as string) > -1
                 }
             });
-        }
-
+        })
         slicersCollection.render()
     }
 

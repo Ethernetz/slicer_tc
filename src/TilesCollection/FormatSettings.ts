@@ -25,7 +25,7 @@ export class TileSettings {
     public colorS: string = null;
     public colorU: string = null;
     public colorH: string = null;
-    public colorN: string = "#666666";
+    public colorN: string = null;
   
     public strokeD: string = "#000";
     public strokeA: string = "";
@@ -87,12 +87,19 @@ export class TileSettings {
     public fontFamilyH: string = null;
     public fontFamilyN: string = null;
 
-    public hmarginD: number = 0;  
-    public hmarginA: number = null;
-    public hmarginS: number = null;
-    public hmarginU: number = null;
-    public hmarginH: number = null;
-    public hmarginN: number = null;
+    public marginLeftD: number = 0
+    public marginLeftA: number = null
+    public marginLeftS: number = null
+    public marginLeftU: number = null
+    public marginLeftH: number = null
+    public marginLeftN: number = null
+
+    public marginRightD: number = 0
+    public marginRightA: number = null
+    public marginRightS: number = null
+    public marginRightU: number = null
+    public marginRightH: number = null
+    public marginRightN: number = null
 
     public bmarginD: number = 0
     public bmarginA: number = null
@@ -123,6 +130,7 @@ export class TileSettings {
     public sizingMethod: TileSizingType = TileSizingType.uniform;
     public tileWidth: number = 150;
     public tileHeight: number = 75;
+    public autoHeight: boolean = false;
     public tileAlignment: AlignmentType = AlignmentType.left
     public tileLayout: TileLayoutType = TileLayoutType.horizontal;
     public rowLength: number = 2;
