@@ -48,7 +48,9 @@ import { valueFormatter } from "powerbi-visuals-utils-formattingutils"
 
 import * as d3 from "d3";
 import { PropertyGroupKeys } from './TilesCollection/interfaces'
-import { getPropertyStateNameArr, getObjectsToPersist, getCorrectPropertyStateName } from './TilesCollectionUtlities/functions'
+import { getPropertyStateNameArr, getObjectsToPersist } from './TilesCollectionUtlities/functions'
+import { getCorrectPropertyStateName } from './TilesCollection/functions'
+
 
 type Selection<T extends d3.BaseType> = d3.Selection<T, any, any, any>;
 
@@ -73,6 +75,8 @@ export class Visual implements IVisual {
         this.selectionIdBuilder = options.host.createSelectionIdBuilder();
         this.selectionManager = options.host.createSelectionManager();
         this.host = options.host;
+        options.element.style.overflow = 'auto';
+        options.element.style.fontSize = "0px"
         this.svg = d3.select(options.element)
             .append('svg')
             .classed('navigator', true);
@@ -170,20 +174,18 @@ export class Visual implements IVisual {
     }
 
     public update(options: VisualUpdateOptions) {
-        if (!(options && options.dataViews && options.dataViews[0]))
+        if (!(options 
+            && options.dataViews 
+            && options.dataViews[0]
+            && options.dataViews[0].categorical
+            && options.dataViews[0].categorical.categories
+            ))
             return
         this.visualSettings = VisualSettings.parse(options.dataViews[0]) as VisualSettings
-
 
         let objects: powerbi.VisualObjectInstancesToPersist = getObjectsToPersist(this.visualSettings)
         if (objects.merge.length != 0)
             this.host.persistProperties(objects);
-
-
-        this.svg
-            .style('width', options.viewport.width)
-            .style('height', options.viewport.height)
-
 
         let slicersCollection = new SlicerCollection()
 
@@ -194,6 +196,7 @@ export class Visual implements IVisual {
         slicersCollection.formatSettings.effect = this.visualSettings.effects
 
 
+        slicersCollection.svg = this.svg
         slicersCollection.container = this.container
         slicersCollection.viewport = {
             height: options.viewport.height,
@@ -204,23 +207,31 @@ export class Visual implements IVisual {
 
 
         let dataView = options.dataViews[0]
+        
         let categories: powerbi.DataViewCategoryColumn[] = dataView.categorical.categories;
+        let values: powerbi.DataViewValueColumn = dataView.categorical.values && dataView.categorical.values[0]
+        let highlights: powerbi.PrimitiveValue[] = values && values.highlights
         let selectionIdKeys: string[] = (this.selectionManager.getSelectionIds() as powerbi.visuals.ISelectionId[]).map(x => x.getKey()) as string[]
 
         for (let i = 0; i < categories[0].values.length; i++) {
-            let pageValue: string = categories[0].values[i].toString();
+            
+            let categoryInstance: string = categories[0].values[i].toString();
+            let instanceValue = values && values.values && values.values[i] as number
+            let instanceHighlight = highlights && (highlights[i] || 0)as number
+
             let iconURL: string = categories[1] ? categories[1].values[i].toString() : "";
             let bgImgURL: string = categories[2] ? categories[2].values[i].toString() : "";
             let tileSelectionId = this.host.createSelectionIdBuilder()
                 .withCategory(categories[0], i)
                 .createSelectionId();
             slicersCollection.tilesData.push({
-                text: pageValue,
+                text: categoryInstance + (values ? ", " +( highlights ? instanceHighlight : instanceValue) : ""),
                 iconURL: this.visualSettings.icon.icons ? iconURL : "",
                 bgimgURL: this.visualSettings.bgimg.bgimgs ? bgImgURL : "",
                 contentFormatType: this.visualSettings.icon.icons ? ContentFormatType.text_icon : ContentFormatType.text,
                 selectionId: tileSelectionId,
                 isHovered: this.hoveredIndex == i,
+                isDisabled: ( highlights ? instanceHighlight : instanceValue) == 0,
                 get isSelected(): boolean {
                     return this.selectionId &&
                         selectionIdKeys &&

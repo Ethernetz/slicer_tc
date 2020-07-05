@@ -29,8 +29,15 @@
 import { dataViewObjectsParser } from "powerbi-visuals-utils-dataviewutils";
 import DataViewObjectsParser = dataViewObjectsParser.DataViewObjectsParser;
 import * as TileCollectionFormatSettings from "./TilesCollection/FormatSettings"
+import { StatesUsed } from "./TilesCollection/interfaces";
 
 export class TileSettings extends TileCollectionFormatSettings.TileSettings{
+  public statesUsed: StatesUsed = {
+    selected: true,
+    unselected: true,
+    hover: true,
+    disabled: true
+  }
 }
 
 export class TextSettings extends TileCollectionFormatSettings.TextSettings{

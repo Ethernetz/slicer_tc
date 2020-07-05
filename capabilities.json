@@ -1,9 +1,16 @@
 {
+    "suppressDefaultTitle": true,
+    "supportsHighlight": true,
     "dataRoles": [
         {
             "displayName": "Category",
             "name": "category",
             "kind": "Grouping"
+        },
+        {
+            "displayName": "Values",
+            "name": "measure",
+            "kind": "Measure"
         },
         {
             "displayName": "Icons",
@@ -95,6 +102,17 @@
                         }
                     }
                 },
+                "colorN": {
+                    "displayName": "Background color (hover)",
+                    "description": "Background color for the hovered tile.",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
                 "strokeA": {
                     "displayName": "Border color",
                     "description": "Border color for the tiles.",
@@ -139,6 +157,17 @@
                         }
                     }
                 },
+                "strokeN": {
+                    "displayName": "Border color (hover)",
+                    "description": "Border color for the tiles.",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
                 "strokeWidthA": {
                     "displayName": "Stroke width",
                     "description": "The width of the stroke in pixels",
@@ -167,6 +196,13 @@
                         "numeric": true
                     }
                 },
+                "strokeWidthN": {
+                    "displayName": "Stroke width",
+                    "description": "The width of the stroke in pixels",
+                    "type": {
+                        "numeric": true
+                    }
+                },
                 "transparencyA": {
                     "displayName": "Transparency",
                     "description": "The transparency of the tile.",
@@ -189,6 +225,13 @@
                     }
                 },
                 "transparencyH": {
+                    "displayName": "Transparency",
+                    "description": "The transparency of the tile.",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "transparencyN": {
                     "displayName": "Transparency",
                     "description": "The transparency of the tile.",
                     "type": {
@@ -1622,7 +1665,6 @@
             }
         }
     },
-    "suppressDefaultTitle": true,
     "dataViewMappings": [
         {
             "categorical": {
@@ -1641,6 +1683,15 @@
                         {
                             "for": {
                                 "in": "bgimgs"
+                            }
+                        }
+                    ]
+                },
+                "values": {
+                    "select": [
+                        {
+                            "bind": {
+                                "to": "measure"
                             }
                         }
                     ]
