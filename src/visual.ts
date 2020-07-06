@@ -228,6 +228,7 @@ export class Visual implements IVisual {
         let values: powerbi.DataViewValueColumn = dataView.categorical.values && dataView.categorical.values[0]
         let highlights: powerbi.PrimitiveValue[] = values && values.highlights
         let selectionIdKeys: string[] = (this.selectionManager.getSelectionIds() as powerbi.visuals.ISelectionId[]).map(x => x.getKey()) as string[]
+        console.log(selectionIdKeys)
 
         let indexesToRender: number[] = []
         if (highlights) {
@@ -273,7 +274,7 @@ export class Visual implements IVisual {
                 bgimgURL: this.visualSettings.bgimg.bgimgs ? bgImgURL : "",
                 contentFormatType: this.visualSettings.icon.icons ? ContentFormatType.text_icon : ContentFormatType.text,
                 selectionId: tileSelectionId,
-                isHovered: this.hoveredIndex == i,
+                isHovered: this.visualSettings.tile.hoverStyling && this.hoveredIndex == i,
                 isDisabled: (highlights ? instanceHighlight : instanceValue) == 0,
                 get isSelected(): boolean {
                     return this.selectionId &&
