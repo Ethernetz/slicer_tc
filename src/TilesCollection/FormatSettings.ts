@@ -10,7 +10,13 @@ export class FormatSettings{
   viewport: Viewport
 }
 
-export class TileSettings {
+export interface TileCollectionStatedFormatObject{
+  state: State,
+  statesUsed: StatesUsed
+}
+
+
+export class TileSettings implements TileCollectionStatedFormatObject{
     public state: State = State.all
     public statesUsed: StatesUsed = {
       selected: true,
@@ -49,7 +55,7 @@ export class TileSettings {
     public transparencyN: number = null; 
   }
 
-  export class TextSettings{
+  export class TextSettings implements TileCollectionStatedFormatObject{
     public state: State = State.all
     public statesUsed: StatesUsed = {
       selected: true,
@@ -137,7 +143,7 @@ export class TileSettings {
     public padding: number = 10;
   }
 
-  export class EffectSettings{
+  export class EffectSettings implements TileCollectionStatedFormatObject{
     public state: State = State.all
     public statesUsed: StatesUsed = {
       selected: true,
@@ -210,7 +216,7 @@ export class TileSettings {
     public glowStrengthN: number = null
   }
 
-  export class IconSettings{
+  export class IconSettings implements TileCollectionStatedFormatObject{
     public icons: boolean = false;
     public state: State = State.all
     public statesUsed: StatesUsed = {

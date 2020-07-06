@@ -31,6 +31,7 @@ import DataViewObjectsParser = dataViewObjectsParser.DataViewObjectsParser;
 import * as TileCollectionFormatSettings from "./TilesCollection/FormatSettings"
 import { StatesUsed } from "./TilesCollection/interfaces";
 import { DisabledMode } from './enums'
+import { PresetStyle } from "./TilesCollection/enums";
 
 export class TileSettings extends TileCollectionFormatSettings.TileSettings {
   public statesUsed: StatesUsed = {
@@ -69,6 +70,11 @@ export class BgImgSettings {
   public bgimgs: boolean = false
 }
 
+export class PresetStyleSettings{
+  public color: string = "#0D6ABF"
+  public preset: PresetStyle = PresetStyle.none
+}
+
 export class VisualSettings extends DataViewObjectsParser {
   public tile: TileSettings = new TileSettings();
   public text: TextSettings = new TextSettings();
@@ -77,4 +83,5 @@ export class VisualSettings extends DataViewObjectsParser {
   public effects: EffectSettings = new EffectSettings();
   public content: ContentSettings = new ContentSettings();
   public bgimg: BgImgSettings = new BgImgSettings();
+  public presetStyle: PresetStyleSettings = new PresetStyleSettings();
 }

@@ -54,7 +54,7 @@ import { getCorrectPropertyStateName } from './TilesCollection/functions'
 
 type Selection<T extends d3.BaseType> = d3.Selection<T, any, any, any>;
 
-import { TileSizingType, TileLayoutType, TileShape, IconPlacement, State } from './TilesCollection/enums'
+import { TileSizingType, TileLayoutType, TileShape, IconPlacement, State, PresetStyle } from './TilesCollection/enums'
 
 import { SlicerCollection } from './SlicerCollection'
 import { ContentFormatType } from "./TilesCollection/enums";
@@ -70,7 +70,9 @@ export class Visual implements IVisual {
     private svg: Selection<SVGElement>;
     private container: Selection<SVGElement>;
     public hoveredIndex: number
-    public shiftFired: boolean = false
+    public shiftFired: boolean = false;
+    public currentPresetStyle: PresetStyle = PresetStyle.none;
+    public currentPresetBaseColor: string = "";
 
     constructor(options: VisualConstructorOptions) {
         this.selectionIdBuilder = options.host.createSelectionIdBuilder();
@@ -194,7 +196,11 @@ export class Visual implements IVisual {
             return
         this.visualSettings = VisualSettings.parse(options.dataViews[0]) as VisualSettings
 
-        let objects: powerbi.VisualObjectInstancesToPersist = getObjectsToPersist(this.visualSettings)
+        let objects: powerbi.VisualObjectInstancesToPersist = getObjectsToPersist(this.visualSettings,
+            this.visualSettings.presetStyle.preset,
+            this.visualSettings.presetStyle.preset != this.currentPresetStyle || this.visualSettings.presetStyle.color != this.currentPresetBaseColor)
+        this.currentPresetStyle = this.visualSettings.presetStyle.preset
+        this.currentPresetBaseColor = this.visualSettings.presetStyle.color
         if (objects.merge.length != 0)
             this.host.persistProperties(objects);
 
@@ -205,7 +211,6 @@ export class Visual implements IVisual {
         slicersCollection.formatSettings.icon = this.visualSettings.icon
         slicersCollection.formatSettings.layout = this.visualSettings.layout
         slicersCollection.formatSettings.effect = this.visualSettings.effects
-
 
         slicersCollection.svg = this.svg
         slicersCollection.container = this.container
@@ -218,7 +223,6 @@ export class Visual implements IVisual {
 
 
         let dataView = options.dataViews[0]
-
         let allCategories: powerbi.DataViewCategoryColumn[] = dataView.categorical.categories;
         let categories = allCategories[0]
         let values: powerbi.DataViewValueColumn = dataView.categorical.values && dataView.categorical.values[0]
@@ -226,7 +230,6 @@ export class Visual implements IVisual {
         let selectionIdKeys: string[] = (this.selectionManager.getSelectionIds() as powerbi.visuals.ISelectionId[]).map(x => x.getKey()) as string[]
 
         let indexesToRender: number[] = []
-
         if (highlights) {
             switch (this.visualSettings.content.disabledMode) {
                 case DisabledMode.hide:
@@ -250,7 +253,7 @@ export class Visual implements IVisual {
                     indexesToRender = [...Array(highlights.length).keys()]
             }
         } else {
-            indexesToRender = [...Array(values.values.length).keys()]
+            indexesToRender = [...Array(categories.values.length).keys()]
         }
 
 
