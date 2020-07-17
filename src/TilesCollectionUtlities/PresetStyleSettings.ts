@@ -72,14 +72,14 @@ export class DarkerTileSettings {
     public colorS: string = shadeHexColor(Preset.baseColor, -0.30);
     public colorU: string = Preset.baseColor;
     public colorH: string = shadeHexColor(Preset.baseColor, -0.15);
-    public colorN: string =  Preset.baseColor;
+    public colorN: string = isLightShaded(Preset.baseColor) ? shadeHexColor(Preset.baseColor, -0.55) : shadeHexColor(Preset.baseColor, 0.55);
 }
 export class DarkerTextSettings {
     public colorA: string = "";
     public colorS: string = isLightShaded(Preset.baseColor) ? "#262222" : "#fff";
     public colorU: string = isLightShaded(Preset.baseColor) ? "#262222" : "#fff";
     public colorH: string = isLightShaded(Preset.baseColor) ? "#262222" : "#fff";
-    public colorN: string = isLightShaded(Preset.baseColor) ? shadeHexColor(Preset.baseColor, -0.45) : shadeHexColor(Preset.baseColor, 0.45);
+    public colorN: string = isLightShaded(Preset.baseColor) ? "#262222" : "#fff";
 }
 
 export class LighterPreset {
@@ -91,14 +91,14 @@ export class LighterTileSettings {
     public colorS: string = shadeHexColor(Preset.baseColor, 0.30);
     public colorU: string = Preset.baseColor;
     public colorH: string = shadeHexColor(Preset.baseColor, 0.15);
-    // public colorN: string = "#9400D3";
+    public colorN: string = shadeHexColor(Preset.baseColor, -0.55);
 }
 export class LighterTextSettings {
     public colorA: string = "";
     public colorS: string = isLightShaded(Preset.baseColor) ? "#262222" : "#fff";
     public colorU: string = isLightShaded(Preset.baseColor) ? "#262222" : "#fff";
     public colorH: string = isLightShaded(Preset.baseColor) ? "#262222" : "#fff";
-    public colorN: string = isLightShaded(Preset.baseColor) ? shadeHexColor(Preset.baseColor, -0.45) : shadeHexColor(Preset.baseColor, 0.45);
+    public colorN: string = isLightShaded(Preset.baseColor) ? "#262222" : shadeHexColor(Preset.baseColor, 0.15);
 }
 
 export class FilledPreset {

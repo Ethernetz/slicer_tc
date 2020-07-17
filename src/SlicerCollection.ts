@@ -7,9 +7,6 @@ import { TilesCollection } from "./TilesCollection/TilesCollection";
 import { Tile } from "./TilesCollection/Tile";
 import powerbi from "powerbi-visuals-api";
 import { TileData } from "./TilesCollection/TileData";
-import * as d3 from "d3";
-
-// import { sizeTextContainer, styleText, makeTextTransparent } from './d3calls'
 
 export class SlicerCollection extends TilesCollection {
     visual: Visual
@@ -30,21 +27,17 @@ export class Slicer extends Tile {
 
 
     onTileClick() {
-        this.visual.selectionManager.select((<SlicerData>this.tileData).selectionId, this.visual.visualSettings.content.multiselect) 
-        this.visual.update(this.collection.options)
+        this.visual.selectionManager.select((<SlicerData>this.tileData).selectionId, this.visual.visualSettings.content.multiselect)
+        this.collection.render(this.visual.createSlicerData()) 
     }
 
     onTileMouseover() {
         this.visual.hoveredIndex = this.i
-        let vs = this.collection.visual.visualSettings
-        if(vs.tile.hoverStyling || vs.text.hoverStyling || vs.icon.hoverStyling || vs.effects.hoverStyling)
-            this.visual.update(this.collection.options)
+        this.collection.render(this.visual.createSlicerData()) 
     }
     onTileMouseout() {
         this.visual.hoveredIndex = null
-        let vs = this.collection.visual.visualSettings
-        if(vs.tile.hoverStyling || vs.text.hoverStyling || vs.icon.hoverStyling || vs.effects.hoverStyling)
-            this.visual.update(this.collection.options)
+        this.collection.render(this.visual.createSlicerData()) 
     }
 }
 
