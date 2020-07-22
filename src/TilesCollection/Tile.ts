@@ -1,7 +1,7 @@
 import { Viewport } from './interfaces'
 import { FormatSettings } from './FormatSettings'
 import { TileData } from './TileData'
-import { State, TileSizingType, TileLayoutType, AlignmentType, TileShape, Direction, ContentFormatType, IconPlacement } from './enums'
+import { State, TileSizingType, TileLayoutType, HorizontalAlignmentType, TileShape, Direction, ContentFormatType, IconPlacement } from './enums'
 import { getMatchingStateProperty, calculateWordDimensions } from './functions'
 import { Shape, Rectangle, Parallelogram, Chevron, Ellipse, Pentagon, Hexagon, Tab_RoundedCorners, Tab_CutCorners, Tab_CutCorner, ChevronVertical, ParallelogramVertical } from "./shapes"
 import { BaseType, thresholdScott } from 'd3'
@@ -14,32 +14,32 @@ export class Tile {
     collection: TilesCollection
     i: number;
     tilesData: TileData[]
-    univeralTileData: UniversalTileData
+    universalTileData: UniversalTileData
     formatSettings: FormatSettings;
     constructor(collection: TilesCollection, i: number, tilesData: TileData[], formatSettings: FormatSettings) {
         this.collection = collection
         this.i = i;
         this.tilesData = tilesData;
-        this.univeralTileData = this.collection.universalTileData;
+        this.universalTileData = this.collection.universalTileData;
         this.formatSettings = formatSettings;
     }
     //Format Settings
 
 
     get tilesInRow(): number {
-        return (this.univeralTileData.numRows - 1) * this.univeralTileData.rowLength > this.i
-            || this.univeralTileData.n % this.univeralTileData.rowLength == 0
-            ? this.univeralTileData.rowLength
-            : this.univeralTileData.n % this.univeralTileData.rowLength
+        return (this.universalTileData.numRows - 1) * this.universalTileData.rowLength > this.i
+            || this.universalTileData.n % this.universalTileData.rowLength == 0
+            ? this.universalTileData.rowLength
+            : this.universalTileData.n % this.universalTileData.rowLength
     }
     get rowNumber(): number {
-        return Math.floor(this.i / this.univeralTileData.rowLength)
+        return Math.floor(this.i / this.universalTileData.rowLength)
     }
     get indexInRow(): number {
-        return this.i % this.univeralTileData.rowLength
+        return this.i % this.universalTileData.rowLength
     }
     get rowStartingIndex(): number {
-        return this.rowNumber * this.univeralTileData.rowLength
+        return this.rowNumber * this.universalTileData.rowLength
     }
 
     get text(): string {
@@ -61,20 +61,36 @@ export class Tile {
     get fontFamily(): string {
         return getMatchingStateProperty(this.currentState, this.formatSettings.text, 'fontFamily')
     }
-    get textAlign(): string {
-        return getMatchingStateProperty(this.currentState, this.formatSettings.text, 'alignment')
+
+    get contentHorizontalAlignment(): string {
+        return getMatchingStateProperty(this.currentState, this.formatSettings.contentAlignment, 'horizontalAlignment')
     }
-    get textMarginLeft(): number {
-        return getMatchingStateProperty(this.currentState, this.formatSettings.text, 'marginLeft')
+    get contentVerticalAlignment(): string {
+        return getMatchingStateProperty(this.currentState, this.formatSettings.contentAlignment, 'verticalAlignment')
     }
-    get textMarginRight(): number {
-        return getMatchingStateProperty(this.currentState, this.formatSettings.text, 'marginRight')
+    get contentMarginLeft(): number {
+        return getMatchingStateProperty(this.currentState, this.formatSettings.contentAlignment, 'leftMargin')
     }
-    get totalHorizontalTextMargin(): number {
-        return this.textMarginLeft + this.textMarginRight
+    get contentMarginRight(): number {
+        return getMatchingStateProperty(this.currentState, this.formatSettings.contentAlignment, 'rightMargin')
     }
+    get contentMarginTop(): number {
+        return getMatchingStateProperty(this.currentState, this.formatSettings.contentAlignment, 'topMargin')
+    }
+    get contentMarginBottom(): number {
+        return getMatchingStateProperty(this.currentState, this.formatSettings.contentAlignment, 'bottomMargin')
+    }
+
+
+    get totalContentHorizontalMargin(): number {
+        return this.contentMarginLeft + this.contentMarginRight
+    }
+    get totalContentVerticalMargin(): number {
+        return this.contentMarginTop + this.contentMarginBottom
+    }
+
     get textBmargin(): number {
-        return getMatchingStateProperty(this.currentState, this.formatSettings.text, 'bmargin')
+        return getMatchingStateProperty(this.currentState, this.formatSettings.text, 'bottomMargin')
     }
 
     get text2Color(): string {
@@ -90,10 +106,10 @@ export class Tile {
         return getMatchingStateProperty(this.currentState, this.formatSettings.text, 'fontFamily')
     }
     get text2Align(): string {
-        return getMatchingStateProperty(this.currentState, this.formatSettings.text, 'alignment')
+        return getMatchingStateProperty(this.currentState, this.formatSettings.text, 'horizontalAlignment')
     }
     get tex2tMarginLeft(): number {
-        return getMatchingStateProperty(this.currentState, this.formatSettings.text, 'marginLeft')
+        return getMatchingStateProperty(this.currentState, this.formatSettings.text, 'leftMargin')
     }
     get text2MarginRight(): number {
         return getMatchingStateProperty(this.currentState, this.formatSettings.text, 'marginRight')
@@ -104,22 +120,23 @@ export class Tile {
         return calculateWordDimensions(this.rowText.join(""), this.fontFamily, this.fontSize + "pt").width
     }
     get widthSpaceForText(): number {
-        return this.contentContainerWidth - this.totalHorizontalTextMargin
+        return this.contentContainerWidth - this.totalContentHorizontalMargin
     }
     get widthSpaceForAllText(): number {
-        return this.univeralTileData.viewport.width - this.univeralTileData.rowLength * this.totalHorizontalTextMargin - this.totalTileHPadding - this.univeralTileData.effectSpace
+        return this.universalTileData.viewport.width - this.universalTileData.rowLength * this.totalContentHorizontalMargin - this.totalTileHPadding - this.universalTileData.effectSpace
     }
     get inlineTextWidth(): number {
         return calculateWordDimensions(this.text, this.fontFamily, this.fontSize + "pt").width
     }
     get boundedTextWidth(): number {
-        return calculateWordDimensions(this.text as string, this.fontFamily, this.fontSize + "pt", this.textContainerWidthType, (this.maxInlineTextWidth) + 'px').width;
+        return calculateWordDimensions(this.text as string, this.fontFamily, this.fontSize + "pt", this.textContainerWidthType, (this.maxHorizontalTextSpace) + 'px').width;
     }
     get boundedTextHeight(): number {
-        return calculateWordDimensions(this.text as string, this.fontFamily, this.fontSize + "pt", this.textContainerWidthType, (this.maxInlineTextWidth) + 'px').height;
+        return calculateWordDimensions(this.text as string, this.fontFamily, this.fontSize + "pt", this.textContainerWidthType, (this.maxHorizontalTextSpace) + 'px').height;
+
     }
     get maxBoundedTextHeight(): number {
-        return this.collection.maxBoundedTextHeight
+        return this.universalTileData.maxBoundedTextHeight
     }
 
     get beforeInRowText(): string[] {
@@ -132,14 +149,14 @@ export class Tile {
     }
 
     get textContainerWidthType(): string {
-        return this.inlineTextWidth + this.totalHorizontalTextMargin >= Math.floor(this.maxInlineTextWidth)
+        return this.inlineTextWidth + this.totalContentHorizontalMargin >= Math.floor(this.maxHorizontalTextSpace)
             && this.contentFormatType == ContentFormatType.text_icon
-            && this.iconPlacement == IconPlacement.left
+            && (this.iconPlacement == IconPlacement.left)
             ? 'min-content' : 'auto'
     }
 
     get textContainerHeight(): number {
-        return this.maxBoundedTextHeight + this.textBmargin
+        return this.maxBoundedTextHeight
     }
     get contentContainerWidth(): number {
         return this.shape.contentBoundingBox.width
@@ -177,37 +194,37 @@ export class Tile {
         return this.tilePadding + this.alterHorizontalPadding
     }
     get totalTileHPadding(): number {
-        return this.tileHPadding * (this.univeralTileData.rowLength - 1)
+        return this.tileHPadding * (this.universalTileData.rowLength - 1)
     }
     get tileVPadding(): number {
         return this.tilePadding + this.alterVerticalPadding
     }
     get totalTileVPadding(): number {
-        return this.tileVPadding * (this.univeralTileData.numRows - 1)
+        return this.tileVPadding * (this.universalTileData.numRows - 1)
     }
     get tileWidth(): number {
         switch (this.formatSettings.layout.sizingMethod) {
             case TileSizingType.uniform:
-                return Math.max((this.univeralTileData.containerWidth - this.totalTileHPadding) / this.univeralTileData.rowLength, this.univeralTileData.minTileWidth + this.shapeExtraHSpace)
+                return Math.max((this.universalTileData.containerWidth - this.totalTileHPadding) / this.universalTileData.rowLength, this.universalTileData.minTileWidth + this.shapeExtraHSpace)
             case TileSizingType.fixed:
                 return this.formatSettings.layout.tileWidth
             case TileSizingType.dynamic:
-                if (this.indexInRow == this.univeralTileData.rowLength - 1)
-                    return this.univeralTileData.containerWidth - this.tileXpos
+                if (this.indexInRow == this.universalTileData.rowLength - 1)
+                    return this.universalTileData.containerWidth - this.tileXpos
                 return this.inlineTextWidth + this.dynamicExtraWidthPerTile
         }
     }
     get dynamicExtraWidthPerTile(): number {
-        let textSpaceRequired = this.allTextWidth + this.totalHorizontalTextMargin * this.univeralTileData.rowLength + this.totalTileHPadding
-        let spaceRemaining = Math.max(0, this.univeralTileData.containerWidth - textSpaceRequired)
-        return spaceRemaining / this.univeralTileData.rowLength
+        let textSpaceRequired = this.allTextWidth + this.totalContentHorizontalMargin * this.universalTileData.rowLength + this.totalTileHPadding
+        let spaceRemaining = Math.max(0, this.universalTileData.containerWidth - textSpaceRequired)
+        return spaceRemaining / this.universalTileData.rowLength
     }
     get tileHeight(): number {
         if (this.formatSettings.layout.autoHeight)
-            return this.univeralTileData.maxInlineTextHeight + 10
+            return this.universalTileData.maxInlineTextHeight + 10
         if (this.formatSettings.layout.sizingMethod == TileSizingType.fixed)
             return this.formatSettings.layout.tileHeight
-        return Math.max((this.univeralTileData.containerHeight - this.totalTileVPadding) / this.univeralTileData.numRows, this.univeralTileData.maxInlineTextHeight + this.shapeExtraVSpace)
+        return Math.max((this.universalTileData.containerHeight - this.totalTileVPadding) / this.universalTileData.numRows, this.universalTileData.maxInlineTextHeight + this.shapeExtraVSpace)
 
     }
 
@@ -215,24 +232,24 @@ export class Tile {
         switch (this.formatSettings.layout.sizingMethod) {
             case TileSizingType.fixed:
                 let areaTaken = this.tilesInRow * this.tileWidth + (this.tilesInRow - 1) * this.tileHPadding
-                let areaRemaining = this.univeralTileData.containerWidth - areaTaken
+                let areaRemaining = this.universalTileData.containerWidth - areaTaken
                 switch (this.formatSettings.layout.tileAlignment) {
-                    case AlignmentType.left:
-                        return this.indexInRow * (this.tileWidth + this.tileHPadding) + this.univeralTileData.effectSpace / 2
-                    case AlignmentType.right:
-                        return areaRemaining + this.indexInRow * (this.tileWidth + this.tileHPadding) + this.univeralTileData.effectSpace / 2
-                    case AlignmentType.center:
-                        return areaRemaining / 2 + this.indexInRow * (this.tileWidth + this.tileHPadding) + this.univeralTileData.effectSpace / 2
+                    case HorizontalAlignmentType.left:
+                        return this.indexInRow * (this.tileWidth + this.tileHPadding) + this.universalTileData.effectSpace / 2
+                    case HorizontalAlignmentType.right:
+                        return areaRemaining + this.indexInRow * (this.tileWidth + this.tileHPadding) + this.universalTileData.effectSpace / 2
+                    case HorizontalAlignmentType.center:
+                        return areaRemaining / 2 + this.indexInRow * (this.tileWidth + this.tileHPadding) + this.universalTileData.effectSpace / 2
 
                 }
             case TileSizingType.uniform:
-                return this.indexInRow * (this.tileWidth + this.tileHPadding) + this.univeralTileData.effectSpace / 2
+                return this.indexInRow * (this.tileWidth + this.tileHPadding) + this.universalTileData.effectSpace / 2
             case TileSizingType.dynamic:
-                return this.beforeInRowTextWidth + this.dynamicExtraWidthPerTile * this.indexInRow + this.univeralTileData.effectSpace / 2 + this.indexInRow * (this.tileHPadding)
+                return this.beforeInRowTextWidth + this.dynamicExtraWidthPerTile * this.indexInRow + this.universalTileData.effectSpace / 2 + this.indexInRow * (this.tileHPadding)
         }
     }
     get tileYpos(): number {
-        return this.rowNumber * (this.tileHeight + this.tileVPadding) + this.univeralTileData.effectSpace / 2
+        return this.rowNumber * (this.tileHeight + this.tileVPadding) + this.universalTileData.effectSpace / 2
     }
 
 
@@ -310,9 +327,9 @@ export class Tile {
             case TileShape.chevron:
                 return Chevron.getExtraHSpace(this.tileHeight, this.formatSettings.layout.chevronAngle)
             case TileShape.pentagon:
-                return Pentagon.getExtraHSpace()
+                return Pentagon.getExtraHSpace(this.tileHeight, this.formatSettings.layout.pentagonAngle)
             case TileShape.hexagon:
-                return Hexagon.getExtraHSpace()
+                return Hexagon.getExtraHSpace(this.tileHeight, this.formatSettings.layout.hexagonAngle)
             default:
                 return 0
         }
@@ -413,14 +430,21 @@ export class Tile {
         return this.contentBoundingBoxWidth - this.iconHmargin
     }
     get iconPlacement(): IconPlacement {
-        return getMatchingStateProperty(this.currentState, this.formatSettings.icon, 'placement')
+        return getMatchingStateProperty(this.currentState, this.formatSettings.contentAlignment, 'iconPlacement')
     }
-    get iconHeight(): number {
-        return this.contentBoundingBoxHeight - this.textContainerHeight - this.iconTopMargin - this.iconBottomMargin
+    get iconVerticalMaxHeight(): number {
+        return this.contentBoundingBoxHeight - this.textContainerHeight - this.totalContentVerticalMargin - this.iconTextPadding
+    }
+    get iconHorizontalMaxHeight(): number {
+        return this.contentBoundingBoxHeight - this.totalContentVerticalMargin
     }
     get iconOpacity(): number {
         return 1 - getMatchingStateProperty(this.currentState, this.formatSettings.icon, 'transparency') / 100
     }
+    get iconTextPadding(): number {
+        return getMatchingStateProperty(this.currentState, this.formatSettings.contentAlignment, 'iconTextPadding')
+    }
+
 
     get bgImgURL(): string {
         if (this.tileData.bgimgURL)
@@ -469,175 +493,107 @@ export class Tile {
             return State.unselected;
     }
 
+    get maxHorizontalTextSpace(): number {
+        let maxSpace = this.contentContainerWidth - this.totalContentHorizontalMargin
+        if (this.contentFormatType == ContentFormatType.text_icon && this.iconPlacement == IconPlacement.left)
+            maxSpace -= (this.iconWidth + this.iconTextPadding)
+        return maxSpace
+    }
+
 
     get textElement(): HTMLSpanElement {
         let text = document.createElement('span')
         text.className = 'text'
         text.style.width = this.boundedTextWidth + 'px'
-
         return text
     }
 
-    get textElementByIcon(): HTMLSpanElement {
-        let text = this.textElement
-        if (this.iconPlacement != IconPlacement.left) {
-            text.style.position = 'absolute'
-            text.style.right = '0'
-        }
-        if (this.iconPlacement == IconPlacement.below) {
-            text.style.bottom = '0'
-        }
-        return text
-    }
 
     get textContainer(): HTMLDivElement {
         let textContainer = document.createElement('div')
         textContainer.className = 'textContainer'
         textContainer.style.position = 'relative'
-        textContainer.style.paddingLeft = this.textMarginLeft + 'px'
-        textContainer.style.paddingRight = this.textMarginRight + 'px'
-        textContainer.style.maxWidth = this.contentContainerWidth - this.totalHorizontalTextMargin + 'px'
         return textContainer
     }
 
-    get textByIconContainer(): HTMLDivElement {
-        let textContainer = this.textContainer
-        if (this.iconPlacement == IconPlacement.left) {
-            textContainer.style.display = 'inline-block'
-            textContainer.style.verticalAlign = 'middle'
-            textContainer.style.width = this.textContainerWidthType
-            textContainer.style.height = this.boundedTextHeight + 'px'
-            textContainer.style.maxWidth = this.maxInlineTextWidth + 'px'
-            textContainer.style.paddingLeft = 0 + 'px'
-            textContainer.style.paddingRight = 0 + 'px'
-        } else {
-            textContainer.style.width = this.widthSpaceForText + 'px'
-            textContainer.style.height = this.textContainerHeight + 'px'
-        }
-        return textContainer
-    }
-
-
-    get icon(): HTMLDivElement {
-        let icon = document.createElement('div')
+    get icon(): HTMLImageElement {
+        let icon = document.createElement('img') as HTMLImageElement
         icon.className = 'icon'
-        icon.style.backgroundImage = "url(" + this.iconURL + ")"
-        icon.style.backgroundRepeat = 'no-repeat'
+        icon.src = this.iconURL
+        console.log(this.universalTileData.maxIconHeight)
+        icon.height = this.universalTileData.maxIconHeight
+        icon.style.objectFit = 'contain'
         icon.style.opacity = this.iconOpacity.toString()
-        if (this.iconPlacement == IconPlacement.left) {
-            icon.style.minWidth = this.iconWidth + 'px'
-            icon.style.height = this.iconWidth + 'px'
-            icon.style.display = 'inline-block'
-            icon.style.verticalAlign = 'middle'
-            icon.style.marginRight = this.iconHmargin + 'px'
-            icon.style.backgroundPosition = 'center center'
-            icon.style.backgroundSize = 'contain'
-        } else {
-            icon.style.maxWidth = this.spaceForIcon + 'px'
-            icon.style.height = this.iconHeight + 'px'
-            icon.style.backgroundSize = Math.min(this.iconWidth, this.spaceForIcon) + 'px '
-            icon.style.margin = this.iconTopMargin + 'px ' + this.iconHmargin + 'px ' + this.iconBottomMargin + 'px '
-            if (this.iconPlacement == IconPlacement.above) {
-                icon.style.backgroundPosition = 'center bottom'
-            } else {
-                icon.style.backgroundPosition = 'center top'
-                // icon.style.position = 'absolute'
-                // icon.style.bottom = '0'
-            }
-        }
+        icon.style.width = this.iconWidth + 'px'
+        icon.style.maxHeight = this.iconHorizontalMaxHeight + 'px'
         return icon
     }
 
-
-    // get text2Container(): HTMLDivElement{
-    //     let container = document.createElement("div")
-    //     container.className = 'text2'
-
-
-    //     let text = document.createElement('span')
-    //     text.className = 'measureText'
-    //     text.textContent = this.isMeasures(this.datapoint) ? this.datapoint.measureValue as string : null
-    //     container.append(text)
-    //     return container
-    // }
-
-    get contentTextText2(): HTMLDivElement {
+    get contentContainer(): HTMLDivElement {
         let contentContainer = document.createElement('div')
         contentContainer.className = "contentContainer"
+        contentContainer.style.marginTop = this.contentMarginTop + 'px'
+        contentContainer.style.marginRight = this.contentMarginRight + 'px'
+        contentContainer.style.marginBottom = this.contentMarginBottom + 'px'
+        contentContainer.style.marginLeft = this.contentMarginLeft + 'px'
 
         let text = this.textElement
         text.textContent = this.text
-
-        let textPrimaryContainer = this.textContainer
-        textPrimaryContainer.append(text)
-
-        let text2 = this.textElement
-        text2.textContent = this.text2
-
-        let text2Container = this.textContainer
-        text2Container.append(text2)
-        text2Container.className = "text2Container"
-
-        contentContainer.append(text2Container, textPrimaryContainer)
-
-        return contentContainer
-    }
-
-    get contentTextIconFormat(): HTMLDivElement {
-        let contentContainer = document.createElement('div')
-        contentContainer.className = "contentContainer"
-
-        let text = this.textElement
-        text.textContent = this.text
-
-        let textContainer = this.textByIconContainer
-        textContainer.append(text)
-
-        if (this.iconPlacement == IconPlacement.left) {
-            contentContainer.style.display = 'inline-block'
-            contentContainer.append(this.icon, textContainer)
-            contentContainer.style.paddingLeft = this.textMarginLeft + 'px'
-            contentContainer.style.paddingRight = this.textMarginRight + 'px'
-        } else {
-            contentContainer.style.height = this.contentBoundingBoxHeight + 'px'
-            contentContainer.style.maxHeight = this.contentBoundingBoxHeight + 'px'
-            if (this.iconPlacement == IconPlacement.above)
-                contentContainer.append(this.icon, textContainer)
-            else
-                contentContainer.append(textContainer, this.icon)
-        }
-
-
-        return contentContainer
-    }
-
-    get contentTextFormat(): HTMLDivElement {
-        let contentContainer = document.createElement('div')
-        contentContainer.className = "contentContainer"
-
-        let text = this.textElement
-        text.textContent = this.text
-
         let textContainer = this.textContainer
+        textContainer.style.maxWidth = this.maxHorizontalTextSpace + 'px'
+
         textContainer.append(text)
+        // textContainer.style.backgroundColor = 'red'
+        textContainer.style.display = 'flex'
+        switch (this.contentHorizontalAlignment) {
+            case HorizontalAlignmentType.left:
+                textContainer.style.justifyContent = 'flex-start'
+                break;
+            case HorizontalAlignmentType.center:
+                textContainer.style.justifyContent = 'center'
+                break;
+            case HorizontalAlignmentType.right:
+                textContainer.style.justifyContent = 'flex-end'
+                break;
+            default:
+                textContainer.style.justifyContent = 'center';
+        }
 
-        contentContainer.append(textContainer)
+        let icon = this.icon
+
+        if (this.contentFormatType == ContentFormatType.text) {
+            contentContainer.append(textContainer)
+        } else if(this.contentFormatType == ContentFormatType.icon){
+            contentContainer.append(icon)
+        } else if (this.contentFormatType == ContentFormatType.text_icon) {
+            textContainer.style.verticalAlign = 'middle'
+
+            if (this.iconPlacement == IconPlacement.left) {
+                icon.style.marginRight = this.iconTextPadding + 'px'
+                icon.style.display = 'inline-block'
+                icon.style.verticalAlign = 'middle'
+                icon.style.marginRight = this.iconHmargin + 'px'
+                textContainer.style.display = 'inline-block'
+                contentContainer.append(icon, textContainer)
+                textContainer.style.width = this.textContainerWidthType
+            } else if (this.iconPlacement == IconPlacement.above) {
+                icon.style.marginBottom = this.iconTextPadding + 'px'
+                icon.style.objectPosition = 'bottom'
+                textContainer.style.height = this.maxBoundedTextHeight + 'px'
+                contentContainer.append(icon, textContainer)
+            } else if (this.iconPlacement == IconPlacement.below) {
+                icon.style.marginTop = this.iconTextPadding + 'px'
+                icon.style.objectPosition = 'top'
+                textContainer.style.height = this.maxBoundedTextHeight + 'px'
+                textContainer.style.alignItems = 'flex-end'
+                contentContainer.append(textContainer, icon)
+            }
 
 
+        }
         return contentContainer
     }
 
-
-    get content(): HTMLDivElement {
-        switch (this.contentFormatType) {
-            case ContentFormatType.text_icon:
-                return this.contentTextIconFormat
-            case ContentFormatType.text_text2:
-                return this.contentTextText2
-            default:
-                return this.contentTextFormat
-        }
-    }
 
     get contentFormatType(): ContentFormatType {
         return this.tileData.contentFormatType
@@ -645,10 +601,10 @@ export class Tile {
 
 
     get inHorizontalWindow(): boolean {
-        return this.tileXpos + this.tileWidth > this.univeralTileData.scrollLeft && this.tileXpos < this.univeralTileData.scrollLeft + this.univeralTileData.viewportWidth
+        return this.tileXpos + this.tileWidth > this.universalTileData.scrollLeft && this.tileXpos < this.universalTileData.scrollLeft + this.universalTileData.viewportWidth
     }
     get inVerticalWindow(): boolean {
-        return this.tileYpos + this.tileHeight > this.univeralTileData.scrollTop && this.tileYpos < this.univeralTileData.scrollTop + this.univeralTileData.viewportHeight
+        return this.tileYpos + this.tileHeight > this.universalTileData.scrollTop && this.tileYpos < this.universalTileData.scrollTop + this.universalTileData.viewportHeight
     }
     get inViewWindow(): boolean {
         return this.inVerticalWindow && this.inHorizontalWindow

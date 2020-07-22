@@ -13,6 +13,8 @@ export class UniversalTileData{
 
     public scrollLeft: number = 0;
     public scrollTop: number = 0;
+    public maxBoundedTextHeight: number;
+    public maxIconHeight: number; 
 
     public viewport: Viewport = {
         height: 0,
@@ -50,13 +52,15 @@ export class UniversalTileData{
     }
 
 
+
     getMaxOfPropertyGroup(formatObj: any, propBase: string): number{
-        return Math.max(
+        let max = Math.max(
             getMatchingStateProperty(State.selected, formatObj, propBase),
             getMatchingStateProperty(State.unselected, formatObj, propBase),
             getMatchingStateProperty(State.hovered, formatObj, propBase),
             getMatchingStateProperty(State.disabled, formatObj, propBase),
         )
+        return max == undefined ? formatObj[propBase + 'D'] || 0 : max
     }
 
 

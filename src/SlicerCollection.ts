@@ -28,16 +28,16 @@ export class Slicer extends Tile {
 
     onTileClick() {
         this.visual.selectionManager.select((<SlicerData>this.tileData).selectionId, this.visual.visualSettings.content.multiselect)
-        this.collection.render(this.visual.createSlicerData()) 
+        this.collection.onStateChange(this.visual.createSlicerData()) 
     }
 
     onTileMouseover() {
         this.visual.hoveredIndex = this.i
-        this.collection.render(this.visual.createSlicerData()) 
+        this.collection.onStateChange(this.visual.createSlicerData()) 
     }
     onTileMouseout() {
         this.visual.hoveredIndex = null
-        this.collection.render(this.visual.createSlicerData()) 
+        this.collection.onStateChange(this.visual.createSlicerData()) 
     }
 }
 

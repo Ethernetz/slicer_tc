@@ -58,6 +58,9 @@ export class LayoutSettings extends TileCollectionFormatSettings.LayoutSettings 
   public padding: number = 2;
 }
 
+export class ContentAlignmentSettings extends TileCollectionFormatSettings.ContentAlignmentSettings{
+}
+
 export class EffectSettings extends TileCollectionFormatSettings.EffectSettings {
 }
 
@@ -80,6 +83,7 @@ export class VisualSettings extends DataViewObjectsParser {
   public text: TextSettings = new TextSettings();
   public icon: IconSettings = new IconSettings();
   public layout: LayoutSettings = new LayoutSettings();
+  public contentAlignment: ContentAlignmentSettings = new ContentAlignmentSettings();
   public effect: EffectSettings = new EffectSettings();
   public content: ContentSettings = new ContentSettings();
   public bgimg: BgImgSettings = new BgImgSettings();
