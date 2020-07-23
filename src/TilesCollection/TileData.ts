@@ -4,6 +4,7 @@ export class TileData{
     text2?: string
     iconURL?: string
     bgimgURL?: string
+    bgimgAspectRatio?: number
     isSelected?: boolean
     isHovered?: boolean
     isDisabled?: boolean

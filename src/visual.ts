@@ -271,6 +271,7 @@ export class Visual implements IVisual {
         if (options.type == VisualUpdateType.Resize || options.type == VisualUpdateType.ResizeEnd) {
             this.slicerCollection.onResize()
         } else {
+            console.log("objects length", objects.merge.length, objects.merge)
             if (objects.merge.length == 0)
                 this.slicerCollection.onDataChange(this.createSlicerData())
         }

@@ -4,6 +4,7 @@ import { TileData } from './TileData'
 import { UniversalTileData } from './UniversalTileData'
 import { Tile } from './Tile'
 import * as d3 from 'd3';
+import { ContentFormatType } from './enums'
 
 type Selection<T extends d3.BaseType> = d3.Selection<T, any, any, any>;
 export class TilesCollection {
@@ -17,43 +18,57 @@ export class TilesCollection {
     visualElement: HTMLElement;
 
     public onDataChange(newTilesData: TileData[]){
-        console.log("ondatachange")
+        let bgimgAspectRatios: { [URL: string]: number} = {};
+        for(let i = 0; i < this.tilesData.length; i++)
+            if(this.tilesData[i].bgimgURL && this.tilesData[i].bgimgAspectRatio)
+                bgimgAspectRatios[(this.tilesData[i].bgimgURL)] = this.tilesData[i].bgimgAspectRatio
+        
         this.tilesData = newTilesData
+
+        for(let i = 0; i < this.tilesData.length; i++)
+            if(this.tilesData[i].bgimgURL && bgimgAspectRatios[this.tilesData[i].bgimgURL] != null)
+                this.tilesData[i].bgimgAspectRatio = bgimgAspectRatios[this.tilesData[i].bgimgURL]
+
+        console.log("data changed")
+
 
         this.universalTileData = this.createUniversalTileData()
         this.tiles = this.createTiles(this.tilesData)
-        
         this.setWindow()
-        this.universalTileData.maxBoundedTextHeight = this.getMaxBoundedTextHeight()
+        this.setTextBounds()
         this.setMaxIconHeight(()=>{this.clear(); this.draw()})
+    }
+
+    public setTextBounds(){
+        this.universalTileData.maxBoundedTextHeight = this.getMaxBoundedTextHeight()
     }
 
     public setMaxIconHeight(callback?: ()=> any): void{
         let asyncI = 0;
         let asyncCount = this.tiles.length;
-        let iconHeights: number[] = []
+        console.log(this.tiles.length)
+        let maxIconHeight: number = 0
         let readImageDimensions = ()=>{
-            console.log('asyncI: ' + asyncI);
+            if(asyncI >= asyncCount){
+                this.universalTileData.maxIconHeight = maxIconHeight
+                console.log(this.universalTileData.maxIconHeight)
+                callback()
+                return
+            }
+
             if(!this.tiles[asyncI].iconURL){
                 asyncI++
-                if (asyncI < asyncCount) {
-                    readImageDimensions();
-                } else {
-                    this.universalTileData.maxIconHeight = iconHeights.length > 0 ? Math.max(...iconHeights) : 0
-                    callback()
-                }
+                readImageDimensions();
+                return
             }
 
             var img = new Image();
             img.onload = (event) => {
                 let loadedImg = event.currentTarget as HTMLImageElement
-                iconHeights[asyncI] = loadedImg ? (loadedImg.height/loadedImg.width) * this.tiles[asyncI].iconWidth : 0
+                maxIconHeight = loadedImg ? Math.max((loadedImg.height/loadedImg.width) * this.universalTileData.maxIconWidth, maxIconHeight) : maxIconHeight
                 asyncI++;
                 if (asyncI < asyncCount) {
                     readImageDimensions();
-                } else {
-                    this.universalTileData.maxIconHeight = iconHeights.length > 0 ? Math.max(...iconHeights) : 0
-                    callback()
                 }
             }
             img.src = this.tiles[asyncI].iconURL;
@@ -71,14 +86,14 @@ export class TilesCollection {
         this.tilesData = newTilesData.map((d, i)=>{return {...this.tilesData[i], ...d}})
         this.tiles = this.createTiles(this.tilesData)
 
-        this.universalTileData.maxBoundedTextHeight = this.getMaxBoundedTextHeight()
+        this.setTextBounds()
         this.draw()
     }
 
     public onResize(){
         this.clear()
         this.setWindow()
-        this.universalTileData.maxBoundedTextHeight = this.getMaxBoundedTextHeight()
+        this.setTextBounds()
         this.draw()
     }
 
@@ -232,27 +247,27 @@ export class TilesCollection {
 
 
 
-        // let coverEnter = tileContainerEnter
-        //     .append('g')
-        //     .attr("class", "cover")
+        let coverEnter = tileContainerEnter
+            .append('g')
+            .attr("class", "cover")
 
-        // coverEnter
-        //     .append("path")
-        //     .attr("class", "coverPath")
+        coverEnter
+            .append("path")
+            .attr("class", "coverPath")
 
-        // let cover = tileContainerFiltered.select('.cover')
-        // cover.select('.coverPath')
-        //     .attr("d", function (d) { return d.shapePath })
-        //     .style("fill-opacity", 0)
-        //     .on('mouseover', (d, i, n) => {
-        //         d.onTileMouseover(d, i, n)
-        //     })
-        //     .on('mouseout', (d, i, n) => {
-        //         d.onTileMouseout(d, i, n)
-        //     })
-        //     .on('click', (d, i, n) => {
-        //         d.onTileClick(d, i, n)
-        //     })
+        let cover = tileContainerFiltered.select('.cover')
+        cover.select('.coverPath')
+            .attr("d", function (d) { return d.shapePath })
+            .style("fill-opacity", 0)
+            .on('mouseover', (d, i, n) => {
+                d.onTileMouseover(d, i, n)
+            })
+            .on('mouseout', (d, i, n) => {
+                d.onTileMouseout(d, i, n)
+            })
+            .on('click', (d, i, n) => {
+                d.onTileClick(d, i, n)
+            })
 
 
 
@@ -306,9 +321,18 @@ export class TilesCollection {
             .attr("height", 1)
 
         pattern.select('.img')
+            .filter((d)=>{return d.tileData.bgimgAspectRatio != null})
+            .attr("xlink:href", d => { return d.bgImgURL })
+            .attr("width", (d)=>d.getBgImgDims(d.tileData.bgimgAspectRatio).width)
+            .attr("height", (d)=>d.getBgImgDims(d.tileData.bgimgAspectRatio).height)
+
+        pattern.select('.img')
+            .filter((d)=>{return !d.tileData.bgimgAspectRatio})
             .on('load', function (d, i, n) {
                 let imgElement: Element = this as any //TODO make types more clear
-                let dims = d.getBgImgDims(imgElement.getBoundingClientRect())
+                let aspectRatio = imgElement.getBoundingClientRect().width/imgElement.getBoundingClientRect().height
+                let dims = d.getBgImgDims(aspectRatio)
+                d.tileData.bgimgAspectRatio = aspectRatio
                 d3.select(this)
                     .attr("width", dims.width)
                     .attr("height", dims.height)
@@ -354,7 +378,7 @@ export class TilesCollection {
         return new Tile(this, i, this.tilesData, this.formatSettings)
     }
     public createUniversalTileData(): UniversalTileData {
-        return new UniversalTileData(this.tilesData, this.formatSettings)
+        return new UniversalTileData(this.tilesData, this.formatSettings, this)
     }
     public createTiles(tilesData: TileData[]): Tile[] {
         let tiles: Tile[] = []
@@ -372,8 +396,9 @@ export class TilesCollection {
     public getMaxBoundedTextHeight(): number {
         let mutableTiles = [...this.tiles]
         let longestTextTiles: Tile[] = mutableTiles.slice().sort((a, b)=> b.text.length - a.text.length ).slice(0, 5)
-        return longestTextTiles.map((d)=> d.boundedTextHeight).sort((a, b)=> b - a)[0]
+        return longestTextTiles.map((d)=> d.maxIndividualBoundedTextHeight).sort((a, b)=> b - a)[0]
     }
+    
 
     public isSameDataState(tdold: TileData, tdnew: TileData): boolean {
         // return JSON.stringify(tdold) === JSON.stringify(tdnew) //TODO is this better?

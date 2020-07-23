@@ -52,6 +52,12 @@ export class TextSettings extends TileCollectionFormatSettings.TextSettings {
 }
 
 export class IconSettings extends TileCollectionFormatSettings.IconSettings {
+  public statesUsed: StatesUsed = {
+    selected: true,
+    unselected: true,
+    hover: true,
+    disabled: true
+  }
 }
 
 export class LayoutSettings extends TileCollectionFormatSettings.LayoutSettings {
@@ -59,9 +65,21 @@ export class LayoutSettings extends TileCollectionFormatSettings.LayoutSettings 
 }
 
 export class ContentAlignmentSettings extends TileCollectionFormatSettings.ContentAlignmentSettings{
+  public statesUsed: StatesUsed = {
+    selected: true,
+    unselected: true,
+    hover: true,
+    disabled: true
+  }
 }
 
 export class EffectSettings extends TileCollectionFormatSettings.EffectSettings {
+  public statesUsed: StatesUsed = {
+    selected: true,
+    unselected: true,
+    hover: true,
+    disabled: true
+  }
 }
 
 export class ContentSettings {
@@ -74,7 +92,7 @@ export class BgImgSettings {
 }
 
 export class PresetStyleSettings{
-  public color: string = "#0D6ABF"
+  public color: string = "#41A4FF"
   public preset: PresetStyle = PresetStyle.none
 }
 

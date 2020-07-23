@@ -469,13 +469,6 @@
                         "bool": true
                     }
                 },
-                "icons": {
-                    "displayName": "Icons",
-                    "description": "Add an icon to each tile",
-                    "type": {
-                        "bool": true
-                    }
-                },
                 "state": {
                     "displayName": "State",
                     "description": "What state to apply the styles to",
@@ -496,6 +489,10 @@
                             {
                                 "displayName": "Hover",
                                 "value": "hovered"
+                            },
+                            {
+                                "displayName": "Disabled",
+                                "value": "disabled"
                             }
                         ]
                     }
@@ -505,86 +502,6 @@
                     "description": "Allow seperate hover styling",
                     "type": {
                         "bool": true
-                    }
-                },
-                "placementA": {
-                    "displayName": "Placement All",
-                    "description": "How tiles will be laid out.",
-                    "type": {
-                        "enumeration": [
-                            {
-                                "displayName": "Left",
-                                "value": "left"
-                            },
-                            {
-                                "displayName": "Above",
-                                "value": "above"
-                            },
-                            {
-                                "displayName": "Below",
-                                "value": "below"
-                            }
-                        ]
-                    }
-                },
-                "placementS": {
-                    "displayName": "Placement",
-                    "description": "How tiles will be laid out.",
-                    "type": {
-                        "enumeration": [
-                            {
-                                "displayName": "Left",
-                                "value": "left"
-                            },
-                            {
-                                "displayName": "Above",
-                                "value": "above"
-                            },
-                            {
-                                "displayName": "Below",
-                                "value": "below"
-                            }
-                        ]
-                    }
-                },
-                "placementU": {
-                    "displayName": "Placement",
-                    "description": "How tiles will be laid out.",
-                    "type": {
-                        "enumeration": [
-                            {
-                                "displayName": "Left",
-                                "value": "left"
-                            },
-                            {
-                                "displayName": "Above",
-                                "value": "above"
-                            },
-                            {
-                                "displayName": "Below",
-                                "value": "below"
-                            }
-                        ]
-                    }
-                },
-                "placementH": {
-                    "displayName": "Placement",
-                    "description": "How tiles will be laid out.",
-                    "type": {
-                        "enumeration": [
-                            {
-                                "displayName": "Left",
-                                "value": "left"
-                            },
-                            {
-                                "displayName": "Above",
-                                "value": "above"
-                            },
-                            {
-                                "displayName": "Below",
-                                "value": "below"
-                            }
-                        ]
                     }
                 },
                 "widthA": {
@@ -615,6 +532,13 @@
                         "numeric": true
                     }
                 },
+                "widthN": {
+                    "displayName": "Width",
+                    "description": "Width of icon in pixels",
+                    "type": {
+                        "numeric": true
+                    }
+                },
                 "transparencyA": {
                     "displayName": "Transparency",
                     "description": "Transparency of icon",
@@ -637,6 +561,13 @@
                     }
                 },
                 "transparencyH": {
+                    "displayName": "Transparency",
+                    "description": "Transparency of icon",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "transparencyN": {
                     "displayName": "Transparency",
                     "description": "Transparency of icon",
                     "type": {
@@ -844,6 +775,10 @@
                             {
                                 "displayName": "Hover",
                                 "value": "hovered"
+                            },
+                            {
+                                "displayName": "Disabled",
+                                "value": "disabled"
                             }
                         ]
                     }
@@ -913,6 +848,17 @@
                         }
                     }
                 },
+                "shadowColorN": {
+                    "displayName": "Color",
+                    "description": "Color of shadow",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
                 "shadowTransparencyA": {
                     "displayName": "Transparency",
                     "description": "Transparency of the shadow.",
@@ -935,6 +881,13 @@
                     }
                 },
                 "shadowTransparencyH": {
+                    "displayName": "Transparency",
+                    "description": "Transparency of the shadow.",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "shadowTransparencyN": {
                     "displayName": "Transparency",
                     "description": "Transparency of the shadow.",
                     "type": {
@@ -1133,6 +1086,54 @@
                         ]
                     }
                 },
+                "shadowDirectionN": {
+                    "displayName": "Direction",
+                    "description": "Direction of the shadow",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Bottom Right",
+                                "value": "bottom_right"
+                            },
+                            {
+                                "displayName": "Bottom",
+                                "value": "bottom"
+                            },
+                            {
+                                "displayName": "Bottom Left",
+                                "value": "bottom_left"
+                            },
+                            {
+                                "displayName": "Left",
+                                "value": "left"
+                            },
+                            {
+                                "displayName": "Center",
+                                "value": "center"
+                            },
+                            {
+                                "displayName": "Top Left",
+                                "value": "top_left"
+                            },
+                            {
+                                "displayName": "Top",
+                                "value": "top"
+                            },
+                            {
+                                "displayName": "Top Right",
+                                "value": "top_right"
+                            },
+                            {
+                                "displayName": "Right",
+                                "value": "right"
+                            },
+                            {
+                                "displayName": "Custom",
+                                "value": "custom"
+                            }
+                        ]
+                    }
+                },
                 "shadowDistanceA": {
                     "displayName": "Distance",
                     "description": "Distance of the shadow.",
@@ -1161,6 +1162,13 @@
                         "numeric": true
                     }
                 },
+                "shadowDistanceN": {
+                    "displayName": "Distance",
+                    "description": "Distance of the shadow.",
+                    "type": {
+                        "numeric": true
+                    }
+                },
                 "shadowStrengthA": {
                     "displayName": "Strength",
                     "description": "Strength of the shadow.",
@@ -1183,6 +1191,13 @@
                     }
                 },
                 "shadowStrengthH": {
+                    "displayName": "Strength",
+                    "description": "Strength of the shadow.",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "shadowStrengthN": {
                     "displayName": "Strength",
                     "description": "Strength of the shadow.",
                     "type": {
@@ -1240,6 +1255,17 @@
                         }
                     }
                 },
+                "glowColorN": {
+                    "displayName": "Color",
+                    "description": "Color of glow",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
                 "glowTransparencyA": {
                     "displayName": "Transparency",
                     "description": "Transparency of the glow.",
@@ -1268,6 +1294,13 @@
                         "numeric": true
                     }
                 },
+                "glowTransparencyN": {
+                    "displayName": "Transparency",
+                    "description": "Transparency of the glow.",
+                    "type": {
+                        "numeric": true
+                    }
+                },
                 "glowStrengthA": {
                     "displayName": "Strength",
                     "description": "Strength of the glow.",
@@ -1290,6 +1323,13 @@
                     }
                 },
                 "glowStrengthH": {
+                    "displayName": "Strength",
+                    "description": "Strength of the glow.",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "glowStrengthN": {
                     "displayName": "Strength",
                     "description": "Strength of the glow.",
                     "type": {
@@ -1422,6 +1462,10 @@
                             {
                                 "displayName": "Hover",
                                 "value": "hovered"
+                            },
+                            {
+                                "displayName": "Disabled",
+                                "value": "disabled"
                             }
                         ]
                     }
@@ -1513,6 +1557,26 @@
                         ]
                     }
                 },
+                "iconPlacementN": {
+                    "displayName": "Icon Placement",
+                    "description": "How tiles will be laid out.",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Left",
+                                "value": "left"
+                            },
+                            {
+                                "displayName": "Above",
+                                "value": "above"
+                            },
+                            {
+                                "displayName": "Below",
+                                "value": "below"
+                            }
+                        ]
+                    }
+                },
                 "iconTextPaddingA": {
                     "displayName": "Icon text padding",
                     "description": "Margin between text and tile left and right",
@@ -1535,6 +1599,13 @@
                     }
                 },
                 "iconTextPaddingH": {
+                    "displayName": "Icon text padding",
+                    "description": "Margin between text and tile left and right",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "iconTextPaddingN": {
                     "displayName": "Icon text padding",
                     "description": "Margin between text and tile left and right",
                     "type": {
@@ -1569,6 +1640,15 @@
                     }
                 },
                 "horizontalAlignmentH": {
+                    "displayName": "Content Horizontal Alignment",
+                    "description": "Alignment position for the text",
+                    "type": {
+                        "formatting": {
+                            "alignment": true
+                        }
+                    }
+                },
+                "horizontalAlignmentN": {
                     "displayName": "Content Horizontal Alignment",
                     "description": "Alignment position for the text",
                     "type": {
@@ -1657,6 +1737,26 @@
                         ]
                     }
                 },
+                "verticalAlignmentN": {
+                    "displayName": "Content Vertical Alignment",
+                    "description": "How tiles will be laid out.",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Top",
+                                "value": "top"
+                            },
+                            {
+                                "displayName": "Middle",
+                                "value": "middle"
+                            },
+                            {
+                                "displayName": "Bottom",
+                                "value": "bottom"
+                            }
+                        ]
+                    }
+                },
                 "leftMarginA": {
                     "displayName": "Left margin",
                     "description": "Margin between text and tile left and right",
@@ -1679,6 +1779,13 @@
                     }
                 },
                 "leftMarginH": {
+                    "displayName": "Left margin",
+                    "description": "Margin between text and tile left and right",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "leftMarginN": {
                     "displayName": "Left margin",
                     "description": "Margin between text and tile left and right",
                     "type": {
@@ -1713,6 +1820,13 @@
                         "numeric": true
                     }
                 },
+                "rightMarginN": {
+                    "displayName": "Right margin",
+                    "description": "Margin between text and tile left and right",
+                    "type": {
+                        "numeric": true
+                    }
+                },
                 "topMarginA": {
                     "displayName": "Top margin",
                     "description": "Margin between text and tile top and bottom",
@@ -1741,6 +1855,13 @@
                         "numeric": true
                     }
                 },
+                "topMarginN": {
+                    "displayName": "Top margin",
+                    "description": "Margin between text and tile top and bottom",
+                    "type": {
+                        "numeric": true
+                    }
+                },
                 "bottomMarginA": {
                     "displayName": "Bottom margin",
                     "description": "Margin between text and tile top and bottom",
@@ -1763,6 +1884,13 @@
                     }
                 },
                 "bottomMarginH": {
+                    "displayName": "Bottom margin",
+                    "description": "Margin between text and tile top and bottom",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "bottomMarginN": {
                     "displayName": "Bottom margin",
                     "description": "Margin between text and tile top and bottom",
                     "type": {
