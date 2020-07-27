@@ -33,7 +33,15 @@ import { StatesUsed } from "./TilesCollection/interfaces";
 import { DisabledMode } from './enums'
 import { PresetStyle } from "./TilesCollection/enums";
 
-export class TileSettings extends TileCollectionFormatSettings.TileSettings {
+export class TileFillSettings extends TileCollectionFormatSettings.TileFillSettings {
+  public statesUsed: StatesUsed = {
+    selected: true,
+    unselected: true,
+    hover: true,
+    disabled: true
+  }
+}
+export class TileStrokeSettings extends TileCollectionFormatSettings.TileStrokeSettings{
   public statesUsed: StatesUsed = {
     selected: true,
     unselected: true,
@@ -58,6 +66,9 @@ export class IconSettings extends TileCollectionFormatSettings.IconSettings {
     hover: true,
     disabled: true
   }
+}
+
+export class ShapeSettings extends TileCollectionFormatSettings.ShapeSettings{
 }
 
 export class LayoutSettings extends TileCollectionFormatSettings.LayoutSettings {
@@ -87,23 +98,20 @@ export class ContentSettings {
   public disabledMode: DisabledMode = DisabledMode.bottom
 }
 
-export class BgImgSettings {
-  public bgimgs: boolean = false
-}
-
 export class PresetStyleSettings{
   public color: string = "#41A4FF"
   public preset: PresetStyle = PresetStyle.none
 }
 
 export class VisualSettings extends DataViewObjectsParser {
-  public tile: TileSettings = new TileSettings();
+  public tileFill: TileFillSettings = new TileFillSettings();
+  public tileStroke: TileStrokeSettings = new TileStrokeSettings();
   public text: TextSettings = new TextSettings();
   public icon: IconSettings = new IconSettings();
+  public shape: ShapeSettings = new ShapeSettings();
   public layout: LayoutSettings = new LayoutSettings();
+  public content: ContentSettings = new ContentSettings();
   public contentAlignment: ContentAlignmentSettings = new ContentAlignmentSettings();
   public effect: EffectSettings = new EffectSettings();
-  public content: ContentSettings = new ContentSettings();
-  public bgimg: BgImgSettings = new BgImgSettings();
-  public presetStyle: PresetStyleSettings = new PresetStyleSettings();
+  public presetStyle: PresetStyleSettings = new PresetStyleSettings()
 }

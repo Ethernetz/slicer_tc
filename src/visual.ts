@@ -46,20 +46,15 @@ import { VisualSettings } from "./settings";
 import VisualObjectInstanceEnumeration = powerbi.VisualObjectInstanceEnumeration;
 import EnumerateVisualObjectInstancesOptions = powerbi.EnumerateVisualObjectInstancesOptions;
 
-import { valueFormatter } from "powerbi-visuals-utils-formattingutils"
 
 import * as d3 from "d3";
 import { PropertyGroupKeys } from './TilesCollection/interfaces'
 import { getPropertyStateNameArr, getObjectsToPersist } from './TilesCollectionUtlities/functions'
-import { getCorrectPropertyStateName } from './TilesCollection/functions'
-
-
 type Selection<T extends d3.BaseType> = d3.Selection<T, any, any, any>;
 
 import { TileSizingType, TileLayoutType, TileShape, IconPlacement, State, PresetStyle } from './TilesCollection/enums'
 
 import { SlicerCollection, SlicerData } from './SlicerCollection'
-import { ContentFormatType } from "./TilesCollection/enums";
 import { DisabledMode } from "./enums";
 
 export class Visual implements IVisual {
@@ -107,7 +102,7 @@ export class Visual implements IVisual {
             let state: State = propertyGroup["state"]
             for (let i = 0; i < groupedKeyNamesArr.length; i++) {
                 let groupedKeyNames = groupedKeyNamesArr[i]
-                if (prefix && !groupedKeyNames.default.startsWith(prefix))
+                if (prefix && (!groupedKeyNames.default || !groupedKeyNames.default.startsWith(prefix)))
                     continue
                 switch (state) {
                     case State.all:
@@ -141,10 +136,15 @@ export class Visual implements IVisual {
 
         const settings: VisualSettings = this.visualSettings || <VisualSettings>VisualSettings.getDefault();
         switch (objectName) {
-            case "tile":
-                properties.state = settings.tile.state
-                properties.hoverStyling = settings.tile.hoverStyling
-                properties = {...properties, ...this.getEnumeratedStateProperties(settings.tile) }
+            case "tileFill":
+                properties.state = settings.tileFill.state
+                properties.hoverStyling = settings.tileFill.hoverStyling
+                properties = { ...properties, ...this.getEnumeratedStateProperties(settings.tileFill) }
+                break
+            case "tileStroke":
+                properties.state = settings.tileStroke.state
+                properties.hoverStyling = settings.tileStroke.hoverStyling
+                properties = { ...properties, ...this.getEnumeratedStateProperties(settings.tileStroke) }
                 break
             case "text": {
                 properties.show = settings.text.show
@@ -173,13 +173,20 @@ export class Visual implements IVisual {
                 properties = { ...properties, ...this.getEnumeratedStateProperties(filtered) }
                 break
             }
+            case "shape": {
+                let filtered = Object.keys(settings.shape)
+                    .filter(key => !(key.endsWith("Angle") || key.endsWith("Length"))
+                        || key == settings.shape.tileShape + "Angle"
+                        || key == settings.shape.tileShape + "Length")
+                    .reduce((obj, key) => {
+                            obj[key] = settings.shape[key]
+                            return obj;
+                        }, {})
+                properties = {...properties, ...filtered}
+            }
             case "layout": {
                 let excludeWhenNotFixed = ["tileWidth", "tileHeight", "tileAlignment"]
-
                 let filtered = Object.keys(settings.layout)
-                    .filter(key => !(key.endsWith("Angle") || key.endsWith("Length"))
-                        || key == settings.layout.tileShape + "Angle"
-                        || key == settings.layout.tileShape + "Length")
                     .filter(key => !(settings.layout.sizingMethod != TileSizingType.fixed && excludeWhenNotFixed.indexOf(key) > -1))
                     .filter(key => !(settings.layout.tileLayout != TileLayoutType.grid && key == "tilesPerRow"))
                     .reduce((obj, key) => {
@@ -201,10 +208,15 @@ export class Visual implements IVisual {
                 properties = { ...properties, ...this.getEnumeratedStateProperties(filtered) }
                 break
             }
-            case "effect":
+            case "effect": {
                 properties.shapeRoundedCornerRadius = settings.effect.shapeRoundedCornerRadius
                 properties.state = settings.effect.state
                 properties.hoverStyling = settings.effect.hoverStyling
+                properties.gradient = settings.effect.gradient
+                if (settings.effect.gradient) {
+                    properties.reverseGradient = settings.effect.reverseGradient
+                    properties = { ...properties, ...this.getEnumeratedStateProperties(settings.effect, "gradient") }
+                }
                 properties.shadow = settings.effect.shadow
                 if (settings.effect.shadow)
                     properties = { ...properties, ...this.getEnumeratedStateProperties(settings.effect, "shadow") }
@@ -212,13 +224,9 @@ export class Visual implements IVisual {
                 if (settings.effect.glow)
                     properties = { ...properties, ...this.getEnumeratedStateProperties(settings.effect, "glow") }
                 break
+            }
             case "content":
                 properties = { ...properties, ...settings.content }
-                break
-            case "bgimg":
-                properties.bgimgs = settings.bgimg.bgimgs
-                if (settings.bgimg.bgimgs)
-                    properties = { ...properties, ...this.getEnumeratedStateProperties(settings.bgimg) }
                 break
             case "presetStyle":
                 properties = { ...properties, ...settings.presetStyle }
@@ -255,9 +263,11 @@ export class Visual implements IVisual {
         if (objects.merge.length != 0)
             this.host.persistProperties(objects);
 
-        this.slicerCollection.formatSettings.tile = this.visualSettings.tile
+        this.slicerCollection.formatSettings.tileStroke = this.visualSettings.tileStroke
+        this.slicerCollection.formatSettings.tileFill = this.visualSettings.tileFill
         this.slicerCollection.formatSettings.text = this.visualSettings.text
         this.slicerCollection.formatSettings.icon = this.visualSettings.icon
+        this.slicerCollection.formatSettings.shape = this.visualSettings.shape
         this.slicerCollection.formatSettings.layout = this.visualSettings.layout
         this.slicerCollection.formatSettings.contentAlignment = this.visualSettings.contentAlignment
         this.slicerCollection.formatSettings.effect = this.visualSettings.effect
@@ -280,18 +290,16 @@ export class Visual implements IVisual {
     public createSlicerData(): SlicerData[] {
         let slicerData: SlicerData[] = []
 
-        let contentFormatType = ContentFormatType.empty
-        if (this.visualSettings.text.show && !this.visualSettings.icon.show)
-            contentFormatType = ContentFormatType.text
-        if (!this.visualSettings.text.show && this.visualSettings.icon.show)
-            contentFormatType = ContentFormatType.icon
-        if (this.visualSettings.text.show && this.visualSettings.icon.show)
-            contentFormatType = ContentFormatType.text_icon
-
 
         let dataView = this.options.dataViews[0]
+        let allCategoryRoles = dataView.metadata.columns.map((d)=>Object.keys(d.roles)[0])
         let allCategories: powerbi.DataViewCategoryColumn[] = dataView.categorical.categories;
-        let categories = allCategories[0]
+
+        let categoriesI = 0
+        let fieldCategory = allCategoryRoles.indexOf("field") > -1 ? allCategories[categoriesI++] : null
+        let iconURLCategory = allCategoryRoles.indexOf("icon") > -1 ? allCategories[categoriesI++] : null
+        let bgimgURLCategory = allCategoryRoles.indexOf("bgimg") > -1 ? allCategories[categoriesI++] : null
+        
         let values: powerbi.DataViewValueColumn = dataView.categorical.values && dataView.categorical.values[0]
         let highlights: powerbi.PrimitiveValue[] = values && values.highlights
 
@@ -323,25 +331,23 @@ export class Visual implements IVisual {
                     indexesToRender = [...Array(highlights.length).keys()]
             }
         } else {
-            indexesToRender = [...Array(categories.values.length).keys()]
+            indexesToRender = [...Array(fieldCategory.values.length).keys()]
         }
 
         indexesToRender.forEach((i, index) => {
-            let categoryInstance: string = categories.values[i].toString();
             let instanceValue = values && values.values && values.values[i] as number
             let instanceHighlight = highlights && (highlights[i] || 0) as number
 
-            let iconURL: string = allCategories[1] ? allCategories[1].values[i].toString() : "";
-            let bgImgURL: string = allCategories[2] ? allCategories[2].values[i].toString() : "";
             let tileSelectionId = this.host.createSelectionIdBuilder()
-                .withCategory(categories, i)
+                .withCategory(fieldCategory, i)
                 .createSelectionId();
 
             slicerData.push({
-                text: categoryInstance + (values ? ", " + (highlights ? instanceHighlight : instanceValue) : ""),
-                iconURL: this.visualSettings.icon.show ? iconURL : "",
-                bgimgURL: this.visualSettings.bgimg.bgimgs ? bgImgURL : "",
-                contentFormatType: contentFormatType,
+                text: this.visualSettings.text.show && fieldCategory ? 
+                fieldCategory.values[i].toString() + (values ? ", " + (highlights ? instanceHighlight : instanceValue) : "") 
+                : null,
+                iconURL: this.visualSettings.icon.show && iconURLCategory ? iconURLCategory.values[i].toString() : null,
+                bgimgURL: bgimgURLCategory ? bgimgURLCategory.values[i].toString() : null,
                 selectionId: tileSelectionId,
                 isHovered: this.hoveredIndex == index,
                 isDisabled: (highlights ? instanceHighlight : instanceValue) == 0,

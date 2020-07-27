@@ -6,29 +6,29 @@
     },
     "dataRoles": [
         {
-            "displayName": "Category",
-            "name": "category",
+            "displayName": "Field",
+            "name": "field",
             "kind": "Grouping"
         },
         {
-            "displayName": "Values",
-            "name": "measure",
+            "displayName": "Value",
+            "name": "value",
             "kind": "Measure"
         },
         {
             "displayName": "Icons",
-            "name": "icons",
+            "name": "icon",
             "kind": "Grouping"
         },
         {
             "displayName": "Background images",
-            "name": "bgimgs",
+            "name": "bgimg",
             "kind": "Grouping"
         }
     ],
     "objects": {
-        "tile": {
-            "displayName": "Tiles",
+        "tileFill": {
+            "displayName": "Fill",
             "properties": {
                 "state": {
                     "displayName": "State",
@@ -50,10 +50,6 @@
                             {
                                 "displayName": "Hover",
                                 "value": "hovered"
-                            },
-                            {
-                                "displayName": "Disabled",
-                                "value": "disabled"
                             }
                         ]
                     }
@@ -118,6 +114,77 @@
                                 "color": true
                             }
                         }
+                    }
+                },
+                "transparencyA": {
+                    "displayName": "Transparency",
+                    "description": "The transparency of the tile.",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "transparencyS": {
+                    "displayName": "Transparency",
+                    "description": "The transparency of the tile.",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "transparencyU": {
+                    "displayName": "Transparency",
+                    "description": "The transparency of the tile.",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "transparencyH": {
+                    "displayName": "Transparency",
+                    "description": "The transparency of the tile.",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "transparencyN": {
+                    "displayName": "Transparency",
+                    "description": "The transparency of the tile.",
+                    "type": {
+                        "numeric": true
+                    }
+                }
+            }
+        },
+        "tileStroke": {
+            "displayName": "Stroke",
+            "properties": {
+                "state": {
+                    "displayName": "State",
+                    "description": "What state to apply the styles to",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "All",
+                                "value": "all"
+                            },
+                            {
+                                "displayName": "Selected",
+                                "value": "selected"
+                            },
+                            {
+                                "displayName": "Unselected",
+                                "value": "unselected"
+                            },
+                            {
+                                "displayName": "Hover",
+                                "value": "hovered"
+                            }
+                        ]
+                    }
+                },
+                "hoverStyling": {
+                    "displayName": "Hover styling",
+                    "description": "Allow seperate hover styling",
+                    "type": {
+                        "bool": true
                     }
                 },
                 "strokeA": {
@@ -206,41 +273,6 @@
                 "strokeWidthN": {
                     "displayName": "Stroke width",
                     "description": "The width of the stroke in pixels",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "transparencyA": {
-                    "displayName": "Transparency",
-                    "description": "The transparency of the tile.",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "transparencyS": {
-                    "displayName": "Transparency",
-                    "description": "The transparency of the tile.",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "transparencyU": {
-                    "displayName": "Transparency",
-                    "description": "The transparency of the tile.",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "transparencyH": {
-                    "displayName": "Transparency",
-                    "description": "The transparency of the tile.",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "transparencyN": {
-                    "displayName": "Transparency",
-                    "description": "The transparency of the tile.",
                     "type": {
                         "numeric": true
                     }
@@ -456,6 +488,96 @@
                     "type": {
                         "numeric": true
                     }
+                },
+                "backgroundColorA": {
+                    "displayName": "Background color",
+                    "description": "Background color for the text.",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "backgroundColorS": {
+                    "displayName": "Background color",
+                    "description": "Background color for the text.",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "backgroundColorU": {
+                    "displayName": "Background color",
+                    "description": "Background color for the text.",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "backgroundColorH": {
+                    "displayName": "Background color",
+                    "description": "Background color for the text.",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "backgroundColorN": {
+                    "displayName": "Background color",
+                    "description": "Background color for the text.",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "backgroundTransparencyA": {
+                    "displayName": "Background transparency",
+                    "description": "The transparency of the font.",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "backgroundTransparencyS": {
+                    "displayName": "Background transparency",
+                    "description": "The transparency of the font.",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "backgroundTransparencyU": {
+                    "displayName": "Background transparency",
+                    "description": "The transparency of the font.",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "backgroundTransparencyH": {
+                    "displayName": "Background transparency",
+                    "description": "The transparency of the font.",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "backgroundTransparencyN": {
+                    "displayName": "Background transparency",
+                    "description": "The transparency of the font.",
+                    "type": {
+                        "numeric": true
+                    }
                 }
             }
         },
@@ -576,8 +698,8 @@
                 }
             }
         },
-        "layout": {
-            "displayName": "Layout",
+        "shape": {
+            "displayName": "Shape",
             "properties": {
                 "tileShape": {
                     "displayName": "Shape",
@@ -664,7 +786,12 @@
                     "type": {
                         "numeric": true
                     }
-                },
+                }
+            }
+        },
+        "layout": {
+            "displayName": "Layout",
+            "properties": {
                 "sizingMethod": {
                     "displayName": "Sizing method",
                     "description": "How tiles will be sized based on their text.",
@@ -726,9 +853,8 @@
                         ]
                     }
                 },
-
                 "tileAlignment": {
-                    "displayName": "Tile alignment",
+                    "displayName": "Tile horizontalAlignment",
                     "description": "Alignment for tiles in the visual",
                     "type": {
                         "formatting": {
@@ -746,6 +872,498 @@
                 "padding": {
                     "displayName": "Padding between tiles",
                     "description": "The padding between tiles.",
+                    "type": {
+                        "numeric": true
+                    }
+                }
+            }
+        },
+        "content": {
+            "displayName": "Content",
+            "properties": {
+                "multiselect": {
+                    "displayName": "Multiselect",
+                    "description": "Ability to select multiple tiles",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "disabledMode": {
+                    "displayName": "Disabled Mode",
+                    "description": "How to handle disabled tiles",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Keep in place",
+                                "value": "inplace"
+                            },
+                            {
+                                "displayName": "Move to bottom",
+                                "value": "bottom"
+                            },
+                            {
+                                "displayName": "Hide",
+                                "value": "hide"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "contentAlignment": {
+            "displayName": "Content Alignment",
+            "properties": {
+                "state": {
+                    "displayName": "State",
+                    "description": "What state to apply the styles to",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "All",
+                                "value": "all"
+                            },
+                            {
+                                "displayName": "Selected",
+                                "value": "selected"
+                            },
+                            {
+                                "displayName": "Unselected",
+                                "value": "unselected"
+                            },
+                            {
+                                "displayName": "Hover",
+                                "value": "hovered"
+                            },
+                            {
+                                "displayName": "Disabled",
+                                "value": "disabled"
+                            }
+                        ]
+                    }
+                },
+                "hoverStyling": {
+                    "displayName": "Hover styling",
+                    "description": "Allow seperate hover styling",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "iconPlacementA": {
+                    "displayName": "Icon Placement",
+                    "description": "How tiles will be laid out.",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Left",
+                                "value": "left"
+                            },
+                            {
+                                "displayName": "Above",
+                                "value": "above"
+                            },
+                            {
+                                "displayName": "Below",
+                                "value": "below"
+                            }
+                        ]
+                    }
+                },
+                "iconPlacementS": {
+                    "displayName": "Icon Placement",
+                    "description": "How tiles will be laid out.",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Left",
+                                "value": "left"
+                            },
+                            {
+                                "displayName": "Above",
+                                "value": "above"
+                            },
+                            {
+                                "displayName": "Below",
+                                "value": "below"
+                            }
+                        ]
+                    }
+                },
+                "iconPlacementU": {
+                    "displayName": "Icon Placement",
+                    "description": "How tiles will be laid out.",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Left",
+                                "value": "left"
+                            },
+                            {
+                                "displayName": "Above",
+                                "value": "above"
+                            },
+                            {
+                                "displayName": "Below",
+                                "value": "below"
+                            }
+                        ]
+                    }
+                },
+                "iconPlacementH": {
+                    "displayName": "Icon Placement",
+                    "description": "How tiles will be laid out.",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Left",
+                                "value": "left"
+                            },
+                            {
+                                "displayName": "Above",
+                                "value": "above"
+                            },
+                            {
+                                "displayName": "Below",
+                                "value": "below"
+                            }
+                        ]
+                    }
+                },
+                "iconPlacementN": {
+                    "displayName": "Icon Placement",
+                    "description": "How tiles will be laid out.",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Left",
+                                "value": "left"
+                            },
+                            {
+                                "displayName": "Above",
+                                "value": "above"
+                            },
+                            {
+                                "displayName": "Below",
+                                "value": "below"
+                            }
+                        ]
+                    }
+                },
+                "iconTextPaddingA": {
+                    "displayName": "Icon text padding",
+                    "description": "Margin between text and tile left and right",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "iconTextPaddingS": {
+                    "displayName": "Icon text padding",
+                    "description": "Margin between text and tile left and right",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "iconTextPaddingU": {
+                    "displayName": "Icon text padding",
+                    "description": "Margin between text and tile left and right",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "iconTextPaddingH": {
+                    "displayName": "Icon text padding",
+                    "description": "Margin between text and tile left and right",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "iconTextPaddingN": {
+                    "displayName": "Icon text padding",
+                    "description": "Margin between text and tile left and right",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "horizontalAlignmentA": {
+                    "displayName": "Content Horizontal Alignment",
+                    "description": "Alignment position for the text",
+                    "type": {
+                        "formatting": {
+                            "alignment": true
+                        }
+                    }
+                },
+                "horizontalAlignmentS": {
+                    "displayName": "Content Horizontal Alignment",
+                    "description": "Alignment position for the text",
+                    "type": {
+                        "formatting": {
+                            "alignment": true
+                        }
+                    }
+                },
+                "horizontalAlignmentU": {
+                    "displayName": "Content Horizontal Alignment",
+                    "description": "Alignment position for the text",
+                    "type": {
+                        "formatting": {
+                            "alignment": true
+                        }
+                    }
+                },
+                "horizontalAlignmentH": {
+                    "displayName": "Content Horizontal Alignment",
+                    "description": "Alignment position for the text",
+                    "type": {
+                        "formatting": {
+                            "alignment": true
+                        }
+                    }
+                },
+                "horizontalAlignmentN": {
+                    "displayName": "Content Horizontal Alignment",
+                    "description": "Alignment position for the text",
+                    "type": {
+                        "formatting": {
+                            "alignment": true
+                        }
+                    }
+                },
+                "verticalAlignmentA": {
+                    "displayName": "Content Vertical Alignment",
+                    "description": "How tiles will be laid out.",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Top",
+                                "value": "top"
+                            },
+                            {
+                                "displayName": "Middle",
+                                "value": "middle"
+                            },
+                            {
+                                "displayName": "Bottom",
+                                "value": "bottom"
+                            }
+                        ]
+                    }
+                },
+                "verticalAlignmentS": {
+                    "displayName": "Content Vertical Alignment",
+                    "description": "How tiles will be laid out.",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Top",
+                                "value": "top"
+                            },
+                            {
+                                "displayName": "Middle",
+                                "value": "middle"
+                            },
+                            {
+                                "displayName": "Bottom",
+                                "value": "bottom"
+                            }
+                        ]
+                    }
+                },
+                "verticalAlignmentU": {
+                    "displayName": "Content Vertical Alignment",
+                    "description": "How tiles will be laid out.",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Top",
+                                "value": "top"
+                            },
+                            {
+                                "displayName": "Middle",
+                                "value": "middle"
+                            },
+                            {
+                                "displayName": "Bottom",
+                                "value": "bottom"
+                            }
+                        ]
+                    }
+                },
+                "verticalAlignmentH": {
+                    "displayName": "Content Vertical Alignment",
+                    "description": "How tiles will be laid out.",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Top",
+                                "value": "top"
+                            },
+                            {
+                                "displayName": "Middle",
+                                "value": "middle"
+                            },
+                            {
+                                "displayName": "Bottom",
+                                "value": "bottom"
+                            }
+                        ]
+                    }
+                },
+                "verticalAlignmentN": {
+                    "displayName": "Content Vertical Alignment",
+                    "description": "How tiles will be laid out.",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Top",
+                                "value": "top"
+                            },
+                            {
+                                "displayName": "Middle",
+                                "value": "middle"
+                            },
+                            {
+                                "displayName": "Bottom",
+                                "value": "bottom"
+                            }
+                        ]
+                    }
+                },
+                "leftMarginA": {
+                    "displayName": "Left margin",
+                    "description": "Margin between text and tile left and right",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "leftMarginS": {
+                    "displayName": "Left margin",
+                    "description": "Margin between text and tile left and right",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "leftMarginU": {
+                    "displayName": "Left margin",
+                    "description": "Margin between text and tile left and right",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "leftMarginH": {
+                    "displayName": "Left margin",
+                    "description": "Margin between text and tile left and right",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "leftMarginN": {
+                    "displayName": "Left margin",
+                    "description": "Margin between text and tile left and right",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "rightMarginA": {
+                    "displayName": "Right margin",
+                    "description": "Margin between text and tile left and right",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "rightMarginS": {
+                    "displayName": "Right margin",
+                    "description": "Margin between text and tile left and right",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "rightMarginU": {
+                    "displayName": "Right margin",
+                    "description": "Margin between text and tile left and right",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "rightMarginH": {
+                    "displayName": "Right margin",
+                    "description": "Margin between text and tile left and right",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "rightMarginN": {
+                    "displayName": "Right margin",
+                    "description": "Margin between text and tile left and right",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "topMarginA": {
+                    "displayName": "Top margin",
+                    "description": "Margin between text and tile top and bottom",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "topMarginS": {
+                    "displayName": "Top margin",
+                    "description": "Margin between text and tile top and bottom",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "topMarginU": {
+                    "displayName": "Top margin",
+                    "description": "Margin between text and tile top and bottom",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "topMarginH": {
+                    "displayName": "Top margin",
+                    "description": "Margin between text and tile top and bottom",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "topMarginN": {
+                    "displayName": "Top margin",
+                    "description": "Margin between text and tile top and bottom",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "bottomMarginA": {
+                    "displayName": "Bottom margin",
+                    "description": "Margin between text and tile top and bottom",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "bottomMarginS": {
+                    "displayName": "Bottom margin",
+                    "description": "Margin between text and tile top and bottom",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "bottomMarginU": {
+                    "displayName": "Bottom margin",
+                    "description": "Margin between text and tile top and bottom",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "bottomMarginH": {
+                    "displayName": "Bottom margin",
+                    "description": "Margin between text and tile top and bottom",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "bottomMarginN": {
+                    "displayName": "Bottom margin",
+                    "description": "Margin between text and tile top and bottom",
                     "type": {
                         "numeric": true
                     }
@@ -795,6 +1413,235 @@
                     "description": "Radius for shape's rounded corner",
                     "type": {
                         "numeric": true
+                    }
+                },
+                "gradient": {
+                    "displayName": "Gradient",
+                    "description": "Add a gradient to each tile",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "reverseGradient": {
+                    "displayName": "Reverse colors",
+                    "description": "Reverse the gradient colors",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "gradientColorA": {
+                    "displayName": "Color",
+                    "description": "Secondary color of gradient",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "gradientColorS": {
+                    "displayName": "Color",
+                    "description": "Secondary color of gradient",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "gradientColorU": {
+                    "displayName": "Color",
+                    "description": "Secondary color of gradient",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "gradientColorH": {
+                    "displayName": "Color",
+                    "description": "Secondary color of gradient",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "gradientColorN": {
+                    "displayName": "Color",
+                    "description": "Secondary color of gradient",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "gradientDirectionA": {
+                    "displayName": "Direction",
+                    "description": "Direction of the gradient",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Horizontal",
+                                "value": "horizontal"
+                            },
+                            {
+                                "displayName": "Vertical",
+                                "value": "vertical"
+                            },
+                            {
+                                "displayName": "Diagonal 1",
+                                "value": "diagonal1"
+                            },
+                            {
+                                "displayName": "Diagonal 2",
+                                "value": "diagonal2"
+                            },
+                            {
+                                "displayName": "Radial",
+                                "value": "radial"
+                            },
+                            {
+                                "displayName": "Custom",
+                                "value": "custom"
+                            }
+                        ]
+                    }
+                },
+                "gradientDirectionS": {
+                    "displayName": "Direction",
+                    "description": "Direction of the gradient",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Horizontal",
+                                "value": "horizontal"
+                            },
+                            {
+                                "displayName": "Vertical",
+                                "value": "vertical"
+                            },
+                            {
+                                "displayName": "Diagonal 1",
+                                "value": "diagonal1"
+                            },
+                            {
+                                "displayName": "Diagonal 2",
+                                "value": "diagonal2"
+                            },
+                            {
+                                "displayName": "Radial",
+                                "value": "radial"
+                            },
+                            {
+                                "displayName": "Custom",
+                                "value": "custom"
+                            }
+                        ]
+                    }
+                },
+                "gradientDirectionU": {
+                    "displayName": "Direction",
+                    "description": "Direction of the gradient",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Horizontal",
+                                "value": "horizontal"
+                            },
+                            {
+                                "displayName": "Vertical",
+                                "value": "vertical"
+                            },
+                            {
+                                "displayName": "Diagonal 1",
+                                "value": "diagonal1"
+                            },
+                            {
+                                "displayName": "Diagonal 2",
+                                "value": "diagonal2"
+                            },
+                            {
+                                "displayName": "Radial",
+                                "value": "radial"
+                            },
+                            {
+                                "displayName": "Custom",
+                                "value": "custom"
+                            }
+                        ]
+                    }
+                },
+                "gradientDirectionH": {
+                    "displayName": "Direction",
+                    "description": "Direction of the gradient",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Horizontal",
+                                "value": "horizontal"
+                            },
+                            {
+                                "displayName": "Vertical",
+                                "value": "vertical"
+                            },
+                            {
+                                "displayName": "Diagonal 1",
+                                "value": "diagonal1"
+                            },
+                            {
+                                "displayName": "Diagonal 2",
+                                "value": "diagonal2"
+                            },
+                            {
+                                "displayName": "Radial",
+                                "value": "radial"
+                            },
+                            {
+                                "displayName": "Custom",
+                                "value": "custom"
+                            }
+                        ]
+                    }
+                },
+                "gradientDirectionN": {
+                    "displayName": "Direction",
+                    "description": "Direction of the gradient",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Horizontal",
+                                "value": "horizontal"
+                            },
+                            {
+                                "displayName": "Vertical",
+                                "value": "vertical"
+                            },
+                            {
+                                "displayName": "Diagonal 1",
+                                "value": "diagonal1"
+                            },
+                            {
+                                "displayName": "Diagonal 2",
+                                "value": "diagonal2"
+                            },
+                            {
+                                "displayName": "Radial",
+                                "value": "radial"
+                            },
+                            {
+                                "displayName": "Custom",
+                                "value": "custom"
+                            }
+                        ]
                     }
                 },
                 "shadow": {
@@ -1337,52 +2184,7 @@
                     }
                 }
             }
-        },
-        "content": {
-            "displayName": "Content",
-            "properties": {
-                "multiselect": {
-                    "displayName": "Multiselect",
-                    "description": "Ability to select multiple tiles",
-                    "type": {
-                        "bool": true
-                    }
-                },
-                "disabledMode": {
-                    "displayName": "Disabled Mode",
-                    "description": "How to handle disabled tiles",
-                    "type": {
-                        "enumeration": [
-                            {
-                                "displayName": "Keep in place",
-                                "value": "inplace"
-                            },
-                            {
-                                "displayName": "Move to bottom",
-                                "value": "bottom"
-                            },
-                            {
-                                "displayName": "Hide",
-                                "value": "hide"
-                            }
-                        ]
-                    }
-                }
-            }
-        },
-        "bgimg": {
-            "displayName": "Background image",
-            "properties": {
-                "bgimgs": {
-                    "displayName": "Background images",
-                    "description": "Option to give URL for tile icons",
-                    "type": {
-                        "bool": true
-                    }
-                }
-            }
-        },
-        
+        },    
         "presetStyle": {
             "displayName": "Preset styles",
             "properties": {
@@ -1438,466 +2240,6 @@
                     }
                 }
             }
-        },
-        "contentAlignment": {
-            "displayName": "Content Alignment",
-            "properties": {
-                "state": {
-                    "displayName": "State",
-                    "description": "What state to apply the styles to",
-                    "type": {
-                        "enumeration": [
-                            {
-                                "displayName": "All",
-                                "value": "all"
-                            },
-                            {
-                                "displayName": "Selected",
-                                "value": "selected"
-                            },
-                            {
-                                "displayName": "Unselected",
-                                "value": "unselected"
-                            },
-                            {
-                                "displayName": "Hover",
-                                "value": "hovered"
-                            },
-                            {
-                                "displayName": "Disabled",
-                                "value": "disabled"
-                            }
-                        ]
-                    }
-                },
-                "hoverStyling": {
-                    "displayName": "Hover styling",
-                    "description": "Allow seperate hover styling",
-                    "type": {
-                        "bool": true
-                    }
-                },
-                "iconPlacementA": {
-                    "displayName": "Icon Placement",
-                    "description": "How tiles will be laid out.",
-                    "type": {
-                        "enumeration": [
-                            {
-                                "displayName": "Left",
-                                "value": "left"
-                            },
-                            {
-                                "displayName": "Above",
-                                "value": "above"
-                            },
-                            {
-                                "displayName": "Below",
-                                "value": "below"
-                            }
-                        ]
-                    }
-                },
-                "iconPlacementS": {
-                    "displayName": "Icon Placement",
-                    "description": "How tiles will be laid out.",
-                    "type": {
-                        "enumeration": [
-                            {
-                                "displayName": "Left",
-                                "value": "left"
-                            },
-                            {
-                                "displayName": "Above",
-                                "value": "above"
-                            },
-                            {
-                                "displayName": "Below",
-                                "value": "below"
-                            }
-                        ]
-                    }
-                },
-                "iconPlacementU": {
-                    "displayName": "Icon Placement",
-                    "description": "How tiles will be laid out.",
-                    "type": {
-                        "enumeration": [
-                            {
-                                "displayName": "Left",
-                                "value": "left"
-                            },
-                            {
-                                "displayName": "Above",
-                                "value": "above"
-                            },
-                            {
-                                "displayName": "Below",
-                                "value": "below"
-                            }
-                        ]
-                    }
-                },
-                "iconPlacementH": {
-                    "displayName": "Icon Placement",
-                    "description": "How tiles will be laid out.",
-                    "type": {
-                        "enumeration": [
-                            {
-                                "displayName": "Left",
-                                "value": "left"
-                            },
-                            {
-                                "displayName": "Above",
-                                "value": "above"
-                            },
-                            {
-                                "displayName": "Below",
-                                "value": "below"
-                            }
-                        ]
-                    }
-                },
-                "iconPlacementN": {
-                    "displayName": "Icon Placement",
-                    "description": "How tiles will be laid out.",
-                    "type": {
-                        "enumeration": [
-                            {
-                                "displayName": "Left",
-                                "value": "left"
-                            },
-                            {
-                                "displayName": "Above",
-                                "value": "above"
-                            },
-                            {
-                                "displayName": "Below",
-                                "value": "below"
-                            }
-                        ]
-                    }
-                },
-                "iconTextPaddingA": {
-                    "displayName": "Icon text padding",
-                    "description": "Margin between text and tile left and right",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "iconTextPaddingS": {
-                    "displayName": "Icon text padding",
-                    "description": "Margin between text and tile left and right",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "iconTextPaddingU": {
-                    "displayName": "Icon text padding",
-                    "description": "Margin between text and tile left and right",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "iconTextPaddingH": {
-                    "displayName": "Icon text padding",
-                    "description": "Margin between text and tile left and right",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "iconTextPaddingN": {
-                    "displayName": "Icon text padding",
-                    "description": "Margin between text and tile left and right",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "horizontalAlignmentA": {
-                    "displayName": "Content Horizontal Alignment",
-                    "description": "Alignment position for the text",
-                    "type": {
-                        "formatting": {
-                            "alignment": true
-                        }
-                    }
-                },
-                "horizontalAlignmentS": {
-                    "displayName": "Content Horizontal Alignment",
-                    "description": "Alignment position for the text",
-                    "type": {
-                        "formatting": {
-                            "alignment": true
-                        }
-                    }
-                },
-                "horizontalAlignmentU": {
-                    "displayName": "Content Horizontal Alignment",
-                    "description": "Alignment position for the text",
-                    "type": {
-                        "formatting": {
-                            "alignment": true
-                        }
-                    }
-                },
-                "horizontalAlignmentH": {
-                    "displayName": "Content Horizontal Alignment",
-                    "description": "Alignment position for the text",
-                    "type": {
-                        "formatting": {
-                            "alignment": true
-                        }
-                    }
-                },
-                "horizontalAlignmentN": {
-                    "displayName": "Content Horizontal Alignment",
-                    "description": "Alignment position for the text",
-                    "type": {
-                        "formatting": {
-                            "alignment": true
-                        }
-                    }
-                },
-                "verticalAlignmentA": {
-                    "displayName": "Content Vertical Alignment",
-                    "description": "How tiles will be laid out.",
-                    "type": {
-                        "enumeration": [
-                            {
-                                "displayName": "Top",
-                                "value": "top"
-                            },
-                            {
-                                "displayName": "Middle",
-                                "value": "middle"
-                            },
-                            {
-                                "displayName": "Bottom",
-                                "value": "bottom"
-                            }
-                        ]
-                    }
-                },
-                "verticalAlignmentS": {
-                    "displayName": "Content Vertical Alignment",
-                    "description": "How tiles will be laid out.",
-                    "type": {
-                        "enumeration": [
-                            {
-                                "displayName": "Top",
-                                "value": "top"
-                            },
-                            {
-                                "displayName": "Middle",
-                                "value": "middle"
-                            },
-                            {
-                                "displayName": "Bottom",
-                                "value": "bottom"
-                            }
-                        ]
-                    }
-                },
-                "verticalAlignmentU": {
-                    "displayName": "Content Vertical Alignment",
-                    "description": "How tiles will be laid out.",
-                    "type": {
-                        "enumeration": [
-                            {
-                                "displayName": "Top",
-                                "value": "top"
-                            },
-                            {
-                                "displayName": "Middle",
-                                "value": "middle"
-                            },
-                            {
-                                "displayName": "Bottom",
-                                "value": "bottom"
-                            }
-                        ]
-                    }
-                },
-                "verticalAlignmentH": {
-                    "displayName": "Content Vertical Alignment",
-                    "description": "How tiles will be laid out.",
-                    "type": {
-                        "enumeration": [
-                            {
-                                "displayName": "Top",
-                                "value": "top"
-                            },
-                            {
-                                "displayName": "Middle",
-                                "value": "middle"
-                            },
-                            {
-                                "displayName": "Bottom",
-                                "value": "bottom"
-                            }
-                        ]
-                    }
-                },
-                "verticalAlignmentN": {
-                    "displayName": "Content Vertical Alignment",
-                    "description": "How tiles will be laid out.",
-                    "type": {
-                        "enumeration": [
-                            {
-                                "displayName": "Top",
-                                "value": "top"
-                            },
-                            {
-                                "displayName": "Middle",
-                                "value": "middle"
-                            },
-                            {
-                                "displayName": "Bottom",
-                                "value": "bottom"
-                            }
-                        ]
-                    }
-                },
-                "leftMarginA": {
-                    "displayName": "Left margin",
-                    "description": "Margin between text and tile left and right",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "leftMarginS": {
-                    "displayName": "Left margin",
-                    "description": "Margin between text and tile left and right",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "leftMarginU": {
-                    "displayName": "Left margin",
-                    "description": "Margin between text and tile left and right",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "leftMarginH": {
-                    "displayName": "Left margin",
-                    "description": "Margin between text and tile left and right",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "leftMarginN": {
-                    "displayName": "Left margin",
-                    "description": "Margin between text and tile left and right",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "rightMarginA": {
-                    "displayName": "Right margin",
-                    "description": "Margin between text and tile left and right",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "rightMarginS": {
-                    "displayName": "Right margin",
-                    "description": "Margin between text and tile left and right",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "rightMarginU": {
-                    "displayName": "Right margin",
-                    "description": "Margin between text and tile left and right",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "rightMarginH": {
-                    "displayName": "Right margin",
-                    "description": "Margin between text and tile left and right",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "rightMarginN": {
-                    "displayName": "Right margin",
-                    "description": "Margin between text and tile left and right",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "topMarginA": {
-                    "displayName": "Top margin",
-                    "description": "Margin between text and tile top and bottom",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "topMarginS": {
-                    "displayName": "Top margin",
-                    "description": "Margin between text and tile top and bottom",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "topMarginU": {
-                    "displayName": "Top margin",
-                    "description": "Margin between text and tile top and bottom",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "topMarginH": {
-                    "displayName": "Top margin",
-                    "description": "Margin between text and tile top and bottom",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "topMarginN": {
-                    "displayName": "Top margin",
-                    "description": "Margin between text and tile top and bottom",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "bottomMarginA": {
-                    "displayName": "Bottom margin",
-                    "description": "Margin between text and tile top and bottom",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "bottomMarginS": {
-                    "displayName": "Bottom margin",
-                    "description": "Margin between text and tile top and bottom",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "bottomMarginU": {
-                    "displayName": "Bottom margin",
-                    "description": "Margin between text and tile top and bottom",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "bottomMarginH": {
-                    "displayName": "Bottom margin",
-                    "description": "Margin between text and tile top and bottom",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "bottomMarginN": {
-                    "displayName": "Bottom margin",
-                    "description": "Margin between text and tile top and bottom",
-                    "type": {
-                        "numeric": true
-                    }
-                }
-            }
         }
     },
     "dataViewMappings": [
@@ -1907,17 +2249,17 @@
                     "select": [
                         {
                             "for": {
-                                "in": "category"
+                                "in": "field"
                             }
                         },
                         {
                             "for": {
-                                "in": "icons"
+                                "in": "icon"
                             }
                         },
                         {
                             "for": {
-                                "in": "bgimgs"
+                                "in": "bgimg"
                             }
                         }
                     ]
@@ -1926,7 +2268,7 @@
                     "select": [
                         {
                             "bind": {
-                                "to": "measure"
+                                "to": "value"
                             }
                         }
                     ]
