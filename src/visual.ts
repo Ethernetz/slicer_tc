@@ -73,7 +73,7 @@ export class Visual implements IVisual {
 
     public visualElement: HTMLElement;
 
-    public selectionIdKeys: string [] = []
+    public selectionIdKeys: string[] = []
 
     public slicerCollection: SlicerCollection
 
@@ -156,10 +156,10 @@ export class Visual implements IVisual {
                         return obj;
                     }, {})
 
-                properties = {...properties, ...this.getEnumeratedStateProperties(filtered) }
+                properties = { ...properties, ...this.getEnumeratedStateProperties(filtered) }
                 break
             }
-            case "icon":{
+            case "icon": {
                 properties.show = settings.icon.show
                 properties.state = settings.icon.state
                 properties.hoverStyling = settings.icon.hoverStyling
@@ -174,15 +174,16 @@ export class Visual implements IVisual {
                 break
             }
             case "shape": {
+                properties.tileShape = settings.shape.tileShape
                 let filtered = Object.keys(settings.shape)
-                    .filter(key => !(key.endsWith("Angle") || key.endsWith("Length"))
-                        || key == settings.shape.tileShape + "Angle"
-                        || key == settings.shape.tileShape + "Length")
+                    .filter(key => key.startsWith(settings.shape.tileShape) && key[settings.shape.tileShape.length] == key[settings.shape.tileShape.length].toUpperCase())
                     .reduce((obj, key) => {
-                            obj[key] = settings.shape[key]
-                            return obj;
-                        }, {})
-                properties = {...properties, ...filtered}
+                        obj[key] = settings.shape[key]
+                        return obj;
+                    }, {})
+                properties = { ...properties, ...filtered }
+                properties.direction = settings.shape.direction
+                properties.roundedCornerRadius = settings.shape.roundedCornerRadius
             }
             case "layout": {
                 let excludeWhenNotFixed = ["tileWidth", "tileHeight", "tileAlignment"]
@@ -209,7 +210,6 @@ export class Visual implements IVisual {
                 break
             }
             case "effect": {
-                properties.shapeRoundedCornerRadius = settings.effect.shapeRoundedCornerRadius
                 properties.state = settings.effect.state
                 properties.hoverStyling = settings.effect.hoverStyling
                 properties.gradient = settings.effect.gradient
@@ -292,19 +292,19 @@ export class Visual implements IVisual {
 
 
         let dataView = this.options.dataViews[0]
-        let allCategoryRoles = dataView.metadata.columns.map((d)=>Object.keys(d.roles)[0])
+        let allCategoryRoles = dataView.metadata.columns.map((d) => Object.keys(d.roles)[0])
         let allCategories: powerbi.DataViewCategoryColumn[] = dataView.categorical.categories;
 
         let categoriesI = 0
         let fieldCategory = allCategoryRoles.indexOf("field") > -1 ? allCategories[categoriesI++] : null
         let iconURLCategory = allCategoryRoles.indexOf("icon") > -1 ? allCategories[categoriesI++] : null
         let bgimgURLCategory = allCategoryRoles.indexOf("bgimg") > -1 ? allCategories[categoriesI++] : null
-        
+
         let values: powerbi.DataViewValueColumn = dataView.categorical.values && dataView.categorical.values[0]
         let highlights: powerbi.PrimitiveValue[] = values && values.highlights
 
         let selectionIdKeys: string[] = (this.selectionManager.getSelectionIds() as powerbi.visuals.ISelectionId[]).map(x => x.getKey()) as string[]
-        if(selectionIdKeys.indexOf(undefined) == -1)
+        if (selectionIdKeys.indexOf(undefined) == -1)
             this.selectionIdKeys = selectionIdKeys
 
         let indexesToRender: number[] = []
@@ -343,9 +343,9 @@ export class Visual implements IVisual {
                 .createSelectionId();
 
             slicerData.push({
-                text: this.visualSettings.text.show && fieldCategory ? 
-                fieldCategory.values[i].toString() + (values ? ", " + (highlights ? instanceHighlight : instanceValue) : "") 
-                : null,
+                text: this.visualSettings.text.show && fieldCategory ?
+                    fieldCategory.values[i].toString() + (values ? ", " + (highlights ? instanceHighlight : instanceValue) : "")
+                    : null,
                 iconURL: this.visualSettings.icon.show && iconURLCategory ? iconURLCategory.values[i].toString() : null,
                 bgimgURL: bgimgURLCategory ? bgimgURLCategory.values[i].toString() : null,
                 selectionId: tileSelectionId,
